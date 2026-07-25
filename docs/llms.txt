@@ -1,5 +1,18 @@
 # fruitArchitecture
 
+``` r
+
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
+remotes::install_github(
+  "ensignanalytics/fruitArchitecture",
+  ref = "v0.1.4-alpha",
+  build_vignettes = TRUE
+)
+```
+
 `fruitArchitecture` reconstructs and quantifies annotation-derived
 signaling architectures from RNA-seq differential-expression evidence.
 It supports two entry points:
@@ -9,10 +22,10 @@ It supports two entry points:
 - [`fruitArchitecture()`](https://ensignanalytics.github.io/fruitArchitecture/reference/fruitArchitecture.md)
   for a raw count matrix analyzed with DESeq2.
 
-Version 0.1.1 is an early research release. The package implements the
-complete software workflow, but metric equations and class thresholds
-remain explicitly versioned while they undergo reference-dataset
-validation.
+Version 0.1.4-alpha is the first public research release. The package
+implements the complete software workflow, while metric equations and
+architecture-class thresholds remain explicitly versioned during
+reference-dataset validation.
 
 ## Installation
 

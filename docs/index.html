@@ -54,7 +54,17 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><div class="section level1">
+  <main id="main" class="col-md-9"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span></span>
+<span>  <span class="st">"ensignanalytics/fruitArchitecture"</span>,</span>
+<span>  ref <span class="op">=</span> <span class="st">"v0.1.4-alpha"</span>,</span>
+<span>  build_vignettes <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="section level1">
 <div class="page-header"><h1 id="fruitarchitecture">fruitArchitecture<a class="anchor" aria-label="anchor" href="#fruitarchitecture"></a>
 </h1></div>
 <p><code>fruitArchitecture</code> reconstructs and quantifies annotation-derived signaling architectures from RNA-seq differential-expression evidence. It supports two entry points:</p>
@@ -72,7 +82,7 @@
 <h3 id="id_1-choose-the-local-r-library">1. Choose the local R library<a class="anchor" aria-label="anchor" href="#id_1-choose-the-local-r-library"></a>
 </h3>
 <p>R normally installs user packages into the first directory returned by <code><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths()</a></code>.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">user_library</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">user_library</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">user_library</span></span></code></pre></div>
@@ -83,7 +93,7 @@
 <h3 id="id_2-install-from-an-extracted-package-project">2. Install from an extracted package project<a class="anchor" aria-label="anchor" href="#id_2-install-from-an-extracted-package-project"></a>
 </h3>
 <p>Download the project ZIP, extract it, and point <code><a href="https://remotes.r-lib.org/reference/install_local.html" class="external-link">remotes::install_local()</a></code> to the extracted directory containing <code>DESCRIPTION</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span>, lib <span class="op">=</span> <span class="va">user_library</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -103,7 +113,7 @@
 <h3 id="id_3-install-the-optional-raw-count-dependency">3. Install the optional raw-count dependency<a class="anchor" aria-label="anchor" href="#id_3-install-the-optional-raw-count-dependency"></a>
 </h3>
 <p>The DEG-table workflow does not require DESeq2. The raw-count workflow does.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, lib <span class="op">=</span> <span class="va">user_library</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -118,7 +128,7 @@
 <div class="section level3">
 <h3 id="id_4-load-and-verify">4. Load and verify<a class="anchor" aria-label="anchor" href="#id_4-load-and-verify"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ensignanalytics/fruitArchitecture" class="external-link">fruitArchitecture</a></span>, lib.loc <span class="op">=</span> <span class="va">user_library</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"fruitArchitecture"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/supportedSpecies.html">supportedSpecies</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -129,7 +139,7 @@
 <h2 id="quick-start-example-using-the-included-deg-table">Quick-start example using the included DEG table<a class="anchor" aria-label="anchor" href="#quick-start-example-using-the-included-deg-table"></a>
 </h2>
 <p>The installed package includes a small synthetic dataset designed to exercise all architecture levels and create reproducible example figures.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ensignanalytics/fruitArchitecture" class="external-link">fruitArchitecture</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">example_directory</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"fruitArchitecture"</span><span class="op">)</span></span>
@@ -157,7 +167,7 @@
 <span><span class="va">result</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div>
 <p>Inspect the principal result tables:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span><span class="op">$</span><span class="va">module_summary</span></span>
 <span><span class="va">result</span><span class="op">$</span><span class="va">interface_summary</span></span>
 <span><span class="va">result</span><span class="op">$</span><span class="va">level3b_genes</span></span>
@@ -168,7 +178,7 @@
 <h2 id="create-sample-figures">Create sample figures<a class="anchor" aria-label="anchor" href="#create-sample-figures"></a>
 </h2>
 <p>Each call returns a regular <code>ggplot2</code> object.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">module_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">result</span>, type <span class="op">=</span> <span class="st">"modules"</span><span class="op">)</span></span>
 <span><span class="va">interface_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">result</span>, type <span class="op">=</span> <span class="st">"interfaces"</span><span class="op">)</span></span>
 <span><span class="va">null_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">result</span>, type <span class="op">=</span> <span class="st">"null"</span><span class="op">)</span></span>
@@ -177,7 +187,7 @@
 <span><span class="va">interface_plot</span></span>
 <span><span class="va">null_plot</span></span></code></pre></div>
 <p>Export all standard figures and analysis tables:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">output_directory</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="st">"fruitArchitecture_example_output"</span></span>
@@ -211,7 +221,7 @@
 <h2 id="full-raw-count-workflow">Full raw-count workflow<a class="anchor" aria-label="anchor" href="#full-raw-count-workflow"></a>
 </h2>
 <p>This example uses the included six-sample count matrix. It requires DESeq2.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ensignanalytics/fruitArchitecture" class="external-link">fruitArchitecture</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">example_directory</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"fruitArchitecture"</span><span class="op">)</span></span>
@@ -273,7 +283,7 @@ G1         Information exchange</code></pre>
 <h2 id="development-installation">Development installation<a class="anchor" aria-label="anchor" href="#development-installation"></a>
 </h2>
 <p>Contributors working from the package root can use:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -288,12 +298,12 @@ G1         Information exchange</code></pre>
 <h2 id="package-manuals">Package manuals<a class="anchor" aria-label="anchor" href="#package-manuals"></a>
 </h2>
 <p>After installation, open the long-form guides from R:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"fruitArchitecture-user-manual"</span>, package <span class="op">=</span> <span class="st">"fruitArchitecture"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"function-data-reference"</span>, package <span class="op">=</span> <span class="st">"fruitArchitecture"</span><span class="op">)</span></span></code></pre></div>
 <p>The first is the full user manual. The second is a compact inventory of public functions, returned-object components, package directories, and the bundled synthetic example data.</p>
 <p>When the package was installed without building vignettes, open the installed static manuals directly:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/browseURL.html" class="external-link">browseURL</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
 <span>  <span class="st">"manuals"</span>,</span>
 <span>  <span class="st">"fruitArchitecture-user-manual.html"</span>,</span>
@@ -307,6 +317,7 @@ G1         Information exchange</code></pre>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
+
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
