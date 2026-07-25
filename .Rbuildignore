@@ -19,3 +19,4 @@
 ^USER_MANUAL\.md$
 ^NAMESPACE\.backup$
 ^fruitArchitecture_example_output$
+^R/fruitArchitecture_example_output$

@@ -1,2 +1,0 @@
-"species","architecture","architecture_class","weighted_isi","level3a_present","level3b_count","architecture_entropy","architecture_balance","robustness_label","robustness_score","expected_level3b","level3b_p_value"
-"synthetic fruit example","PHMIES","IV",1,TRUE,4,1,1,"High",1,1.3402,0.0107978404319136

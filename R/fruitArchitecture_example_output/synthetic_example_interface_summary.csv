@@ -1,4 +1,0 @@
-"interface","module_a","module_b","overlap_genes","present","genes"
-"Hormone-MAPK","Plant hormone signal transduction","MAPK signaling",6,TRUE,"FA_G001;FA_G002;FA_G003;FA_G004;FA_G005;FA_G006"
-"Hormone-Information exchange","Plant hormone signal transduction","Information exchange",6,TRUE,"FA_G001;FA_G002;FA_G003;FA_G004;FA_G007;FA_G008"
-"MAPK-Information exchange","MAPK signaling","Information exchange",6,TRUE,"FA_G001;FA_G002;FA_G003;FA_G004;FA_G009;FA_G010"

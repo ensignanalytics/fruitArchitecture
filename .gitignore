@@ -9,3 +9,6 @@ inst/doc
 .Rdata
 .httr-oauth
 .quarto
+.positai
+fruitArchitecture_example_output/
+R/fruitArchitecture_example_output/
