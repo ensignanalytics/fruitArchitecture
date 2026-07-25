@@ -1,0 +1,62 @@
+url: https://ensignanalytics.github.io/fruitArchitecture/
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left:
+      - intro
+      - reference
+      - articles
+      - news
+    right:
+      - search
+      - github
+
+  components:
+    intro:
+      text: Get started
+      href: articles/getting-started.html
+
+    reference:
+      text: Reference
+      href: reference/index.html
+
+    articles:
+      text: Manuals
+      menu:
+        - text: User manual
+          href: articles/fruitArchitecture-user-manual.html
+        - text: Function and data reference
+          href: articles/function-data-reference.html
+
+    news:
+      text: Changelog
+      href: news/index.html
+
+    github:
+      icon: fab fa-github
+      href: https://github.com/ensignanalytics/fruitArchitecture
+      aria-label: GitHub repository
+
+reference:
+  - title: Main analysis
+    contents:
+      - fruitArchitecture
+      - fruitArchitectureFromDEG
+
+  - title: Example workflow
+    contents:
+      - fruitArchitectureExample
+      - fruitArchitectureExampleData
+
+  - title: Results and figures
+    contents:
+      - plot.fruit_architecture
+      - exportArchitecture
+      - exportFigures
+
+  - title: Species support
+    contents:
+      - supportedSpecies
