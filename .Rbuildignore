@@ -20,3 +20,6 @@
 ^NAMESPACE\.backup$
 ^fruitArchitecture_example_output$
 ^R/fruitArchitecture_example_output$
+^_pkgdown\.yml$
+^docs$
+^release$
