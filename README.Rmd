@@ -1,0 +1,301 @@
+---
+output: github_document
+---
+
+# fruitArchitecture
+
+`fruitArchitecture` reconstructs and quantifies annotation-derived signaling
+architectures from RNA-seq differential-expression evidence. It supports two
+entry points:
+
+- `fruitArchitectureFromDEG()` for an existing differential-expression table.
+- `fruitArchitecture()` for a raw count matrix analyzed with DESeq2.
+
+Version 0.1.1 is an early research release. The package implements the complete
+software workflow, but metric equations and class thresholds remain explicitly
+versioned while they undergo reference-dataset validation.
+
+## Installation
+
+### 1. Choose the local R library
+
+R normally installs user packages into the first directory returned by
+`.libPaths()`.
+
+```r
+user_library <- .libPaths()[1]
+dir.create(user_library, recursive = TRUE, showWarnings = FALSE)
+user_library
+```
+
+On Windows with R 4.5, this is commonly similar to:
+
+```text
+C:/Users/<username>/AppData/Local/R/win-library/4.5
+```
+
+### 2. Install from an extracted package project
+
+Download the project ZIP, extract it, and point `remotes::install_local()` to
+the extracted directory containing `DESCRIPTION`.
+
+```r
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes", lib = user_library)
+}
+
+package_directory <- "C:/Users/<username>/Downloads/fruitArchitecture"
+
+remotes::install_local(
+  package_directory,
+  lib = user_library,
+  dependencies = c("Depends", "Imports", "LinkingTo"),
+  upgrade = "never",
+  force = TRUE
+)
+```
+
+A project ZIP is not the same as a built Windows binary ZIP. Do not use
+`type = "win.binary"` unless the file was created by `R CMD INSTALL --build`
+or an equivalent binary-build service.
+
+### 3. Install the optional raw-count dependency
+
+The DEG-table workflow does not require DESeq2. The raw-count workflow does.
+
+```r
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager", lib = user_library)
+}
+
+BiocManager::install(
+  "DESeq2",
+  lib = user_library,
+  ask = FALSE,
+  update = FALSE
+)
+```
+
+### 4. Load and verify
+
+```r
+library(fruitArchitecture, lib.loc = user_library)
+packageVersion("fruitArchitecture")
+supportedSpecies()
+```
+
+If Windows reports that `rlang.dll`, `glue.dll`, or `cli.dll` is locked, close
+all R and RStudio sessions, remove any `00LOCK*` directories from the user
+library, restart R, and reinstall those dependencies. A final
+`* DONE (fruitArchitecture)` message means the package itself installed.
+
+## Quick-start example using the included DEG table
+
+The installed package includes a small synthetic dataset designed to exercise
+all architecture levels and create reproducible example figures.
+
+```r
+library(fruitArchitecture)
+
+example_directory <- system.file("extdata", package = "fruitArchitecture")
+
+deg_table <- utils::read.csv(
+  file.path(example_directory, "fruitArchitecture_example_deg.csv"),
+  check.names = FALSE
+)
+
+annotation <- utils::read.csv(
+  file.path(example_directory, "fruitArchitecture_example_annotation.csv"),
+  check.names = FALSE
+)
+
+result <- fruitArchitectureFromDEG(
+  deg_table = deg_table,
+  annotation = annotation,
+  species = "synthetic fruit example",
+  alpha = 0.05,
+  log2fc_threshold = 1,
+  n_permutations = 5000,
+  seed = 1234
+)
+
+result
+summary(result)
+```
+
+Inspect the principal result tables:
+
+```r
+result$module_summary
+result$interface_summary
+result$level3b_genes
+result$metrics
+result$null_model[c("method", "expected", "observed", "p_value")]
+```
+
+## Create sample figures
+
+Each call returns a regular `ggplot2` object.
+
+```r
+module_plot <- plot(result, type = "modules")
+interface_plot <- plot(result, type = "interfaces")
+null_plot <- plot(result, type = "null")
+
+module_plot
+interface_plot
+null_plot
+```
+
+Export all standard figures and analysis tables:
+
+```r
+output_directory <- file.path(
+  getwd(),
+  "fruitArchitecture_example_output"
+)
+
+exportArchitecture(
+  result,
+  directory = output_directory,
+  prefix = "synthetic_example"
+)
+
+exportFigures(
+  result,
+  directory = file.path(output_directory, "figures"),
+  formats = c("pdf", "png", "tiff"),
+  width = 9,
+  height = 6,
+  dpi = 600
+)
+
+list.files(output_directory, recursive = TRUE)
+```
+
+The output includes:
+
+- a serialized `fruit_architecture` RDS object;
+- differential-expression, gene-membership, module, interface, and summary CSVs;
+- module-support, interface-support, and Level 3B null-distribution figures;
+- vector PDF and high-resolution PNG/TIFF versions of each figure.
+
+## Full raw-count workflow
+
+This example uses the included six-sample count matrix. It requires DESeq2.
+
+```r
+library(fruitArchitecture)
+
+example_directory <- system.file("extdata", package = "fruitArchitecture")
+
+counts_data <- utils::read.csv(
+  file.path(example_directory, "fruitArchitecture_example_counts.csv"),
+  row.names = 1,
+  check.names = FALSE
+)
+counts <- as.matrix(counts_data)
+storage.mode(counts) <- "integer"
+
+design <- utils::read.csv(
+  file.path(example_directory, "fruitArchitecture_example_design.csv"),
+  row.names = 1,
+  check.names = FALSE
+)
+design$condition <- factor(
+  design$condition,
+  levels = c("immature", "ripe")
+)
+
+annotation <- utils::read.csv(
+  file.path(example_directory, "fruitArchitecture_example_annotation.csv"),
+  check.names = FALSE
+)
+
+count_result <- fruitArchitecture(
+  counts = counts,
+  design = design,
+  species = "synthetic fruit example",
+  formula = ~ condition,
+  contrast = c("condition", "ripe", "immature"),
+  annotation = annotation,
+  alpha = 0.05,
+  log2fc_threshold = 1,
+  n_permutations = 5000,
+  seed = 1234
+)
+
+count_result
+plot(count_result, type = "modules")
+```
+
+## Required input schemas
+
+A DEG table must contain one row per unique gene and, by default, these fields:
+
+```text
+gene_id
+log2_fold_change
+adjusted_p_value
+```
+
+Annotation must be long format with one row per gene-module assignment:
+
+```text
+gene_id    module
+G1         Plant hormone signal transduction
+G1         MAPK signaling
+G1         Information exchange
+```
+
+Alternative DEG column names can be provided through `gene_id_col`,
+`log2fc_col`, and `padj_col`.
+
+## Development installation
+
+Contributors working from the package root can use:
+
+```r
+if (!requireNamespace("devtools", quietly = TRUE)) {
+  install.packages("devtools")
+}
+
+devtools::document()
+devtools::test()
+devtools::check()
+devtools::install()
+```
+
+See `vignette("getting-started", package = "fruitArchitecture")` for the full
+installed-package workflow. After installation, the complete example can also be
+run with `demo("fruitArchitecture-example", package = "fruitArchitecture")`.
+
+## Package manuals
+
+After installation, open the long-form guides from R:
+
+```r
+vignette("fruitArchitecture-user-manual", package = "fruitArchitecture")
+vignette("function-data-reference", package = "fruitArchitecture")
+```
+
+The first is the full user manual. The second is a compact inventory of public
+functions, returned-object components, package directories, and the bundled
+synthetic example data.
+
+When the package was installed without building vignettes, open the installed
+static manuals directly:
+
+```r
+browseURL(system.file(
+  "manuals",
+  "fruitArchitecture-user-manual.html",
+  package = "fruitArchitecture"
+))
+
+browseURL(system.file(
+  "manuals",
+  "function-data-reference.html",
+  package = "fruitArchitecture"
+))
+```

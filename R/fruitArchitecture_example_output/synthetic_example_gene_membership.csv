@@ -1,0 +1,75 @@
+"gene_id","module","deg_status","direction","log2_fold_change","adjusted_p_value","level3b"
+"FA_G001","Plant hormone signal transduction",TRUE,"Up",3.35,1.05e-06,TRUE
+"FA_G001","MAPK signaling",TRUE,"Up",3.35,1.05e-06,TRUE
+"FA_G001","Information exchange",TRUE,"Up",3.35,1.05e-06,TRUE
+"FA_G002","Plant hormone signal transduction",TRUE,"Up",3.5,1.1e-06,TRUE
+"FA_G002","MAPK signaling",TRUE,"Up",3.5,1.1e-06,TRUE
+"FA_G002","Information exchange",TRUE,"Up",3.5,1.1e-06,TRUE
+"FA_G003","Plant hormone signal transduction",TRUE,"Up",3.2,1.15e-06,TRUE
+"FA_G003","MAPK signaling",TRUE,"Up",3.2,1.15e-06,TRUE
+"FA_G003","Information exchange",TRUE,"Up",3.2,1.15e-06,TRUE
+"FA_G004","Plant hormone signal transduction",TRUE,"Up",3.35,1.2e-06,TRUE
+"FA_G004","MAPK signaling",TRUE,"Up",3.35,1.2e-06,TRUE
+"FA_G004","Information exchange",TRUE,"Up",3.35,1.2e-06,TRUE
+"FA_G005","Plant hormone signal transduction",TRUE,"Up",3.5,1.25e-06,FALSE
+"FA_G005","MAPK signaling",TRUE,"Up",3.5,1.25e-06,FALSE
+"FA_G006","Plant hormone signal transduction",TRUE,"Up",3.2,1.3e-06,FALSE
+"FA_G006","MAPK signaling",TRUE,"Up",3.2,1.3e-06,FALSE
+"FA_G007","Plant hormone signal transduction",TRUE,"Up",3.35,1.35e-06,FALSE
+"FA_G007","Information exchange",TRUE,"Up",3.35,1.35e-06,FALSE
+"FA_G008","Plant hormone signal transduction",TRUE,"Up",3.5,1.4e-06,FALSE
+"FA_G008","Information exchange",TRUE,"Up",3.5,1.4e-06,FALSE
+"FA_G009","MAPK signaling",TRUE,"Up",3.2,1.45e-06,FALSE
+"FA_G009","Information exchange",TRUE,"Up",3.2,1.45e-06,FALSE
+"FA_G010","MAPK signaling",TRUE,"Up",3.35,1.5e-06,FALSE
+"FA_G010","Information exchange",TRUE,"Up",3.35,1.5e-06,FALSE
+"FA_G011","Circadian rhythm",TRUE,"Down",-3.36,2.73333333333333e-06,FALSE
+"FA_G012","Protein processing in endoplasmic reticulum",TRUE,"Down",-3,2.8e-06,FALSE
+"FA_G013","RNA transport",TRUE,"Down",-3.12,2.86666666666667e-06,FALSE
+"FA_G014","RNA degradation",TRUE,"Down",-3.24,2.93333333333333e-06,FALSE
+"FA_G015","SNARE interactions",TRUE,"Down",-3.36,3e-06,FALSE
+"FA_G016","Autophagy",TRUE,"Down",-3,3.06666666666667e-06,FALSE
+"FA_G017","Sulfur relay system",TRUE,"Down",-3.12,3.13333333333333e-06,FALSE
+"FA_G018","Plant hormone signal transduction",TRUE,"Down",-3.24,3.2e-06,FALSE
+"FA_G019","MAPK signaling",TRUE,"Down",-3.36,3.26666666666667e-06,FALSE
+"FA_G020","Information exchange",TRUE,"Down",-3,3.33333333333333e-06,FALSE
+"FA_G021","Circadian rhythm",FALSE,"Not significant",-0.12,0.73,FALSE
+"FA_G022","Plant hormone signal transduction",FALSE,"Not significant",0.21,0.82,FALSE
+"FA_G023","MAPK signaling",FALSE,"Not significant",-0.18,0.55,FALSE
+"FA_G024","Information exchange",FALSE,"Not significant",0.05,0.91,FALSE
+"FA_G025","Protein processing in endoplasmic reticulum",FALSE,"Not significant",0.08,0.61,FALSE
+"FA_G026","RNA transport",FALSE,"Not significant",-0.12,0.73,FALSE
+"FA_G027","RNA degradation",FALSE,"Not significant",0.21,0.82,FALSE
+"FA_G028","SNARE interactions",FALSE,"Not significant",-0.18,0.55,FALSE
+"FA_G029","Autophagy",FALSE,"Not significant",0.05,0.91,FALSE
+"FA_G030","Sulfur relay system",FALSE,"Not significant",0.08,0.61,FALSE
+"FA_G031","Circadian rhythm",FALSE,"Not significant",-0.12,0.73,FALSE
+"FA_G032","Plant hormone signal transduction",FALSE,"Not significant",0.21,0.82,FALSE
+"FA_G033","MAPK signaling",FALSE,"Not significant",-0.18,0.55,FALSE
+"FA_G034","Information exchange",FALSE,"Not significant",0.05,0.91,FALSE
+"FA_G035","Protein processing in endoplasmic reticulum",FALSE,"Not significant",0.08,0.61,FALSE
+"FA_G036","RNA transport",FALSE,"Not significant",-0.12,0.73,FALSE
+"FA_G037","RNA degradation",FALSE,"Not significant",0.21,0.82,FALSE
+"FA_G038","SNARE interactions",FALSE,"Not significant",-0.18,0.55,FALSE
+"FA_G039","Autophagy",FALSE,"Not significant",0.05,0.91,FALSE
+"FA_G040","Sulfur relay system",FALSE,"Not significant",0.08,0.61,FALSE
+"FA_G041","Circadian rhythm",FALSE,"Not significant",-0.12,0.73,FALSE
+"FA_G042","Plant hormone signal transduction",FALSE,"Not significant",0.21,0.82,FALSE
+"FA_G043","MAPK signaling",FALSE,"Not significant",-0.18,0.55,FALSE
+"FA_G044","Information exchange",FALSE,"Not significant",0.05,0.91,FALSE
+"FA_G045","Protein processing in endoplasmic reticulum",FALSE,"Not significant",0.08,0.61,FALSE
+"FA_G046","RNA transport",FALSE,"Not significant",-0.12,0.73,FALSE
+"FA_G047","RNA degradation",FALSE,"Not significant",0.21,0.82,FALSE
+"FA_G048","SNARE interactions",FALSE,"Not significant",-0.18,0.55,FALSE
+"FA_G049","Autophagy",FALSE,"Not significant",0.05,0.91,FALSE
+"FA_G050","Sulfur relay system",FALSE,"Not significant",0.08,0.61,FALSE
+"FA_G051","Circadian rhythm",FALSE,"Not significant",-0.12,0.73,FALSE
+"FA_G052","Plant hormone signal transduction",FALSE,"Not significant",0.21,0.82,FALSE
+"FA_G053","MAPK signaling",FALSE,"Not significant",-0.18,0.55,FALSE
+"FA_G054","Information exchange",FALSE,"Not significant",0.05,0.91,FALSE
+"FA_G055","Protein processing in endoplasmic reticulum",FALSE,"Not significant",0.08,0.61,FALSE
+"FA_G056","RNA transport",FALSE,"Not significant",-0.12,0.73,FALSE
+"FA_G057","RNA degradation",FALSE,"Not significant",0.21,0.82,FALSE
+"FA_G058","SNARE interactions",FALSE,"Not significant",-0.18,0.55,FALSE
+"FA_G059","Autophagy",FALSE,"Not significant",0.05,0.91,FALSE
+"FA_G060","Sulfur relay system",FALSE,"Not significant",0.08,0.61,FALSE

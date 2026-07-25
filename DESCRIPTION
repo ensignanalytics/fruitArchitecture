@@ -1,0 +1,37 @@
+Package: fruitArchitecture
+Title: Reconstruct and Quantify Higher-Order Signaling Architectures
+Version: 0.1.4
+Authors@R: 
+    person(
+      given = "Franklin T.",
+      family = "Johnson",
+      role = c("aut", "cre"),
+      email = "replace-with-your-email@example.com"
+    )
+Description: Reconstructs annotation-derived signaling modules, pairwise
+    interfaces, and higher-order organizational architectures from
+    transcriptomic differential-expression results. The package provides
+    architecture classification, weighted interface symmetry metrics,
+    balance and entropy statistics, permutation-based Level 3B testing,
+    robustness summaries, and publication-quality visualizations.
+License: MIT + file LICENSE
+URL: https://github.com/replace-with-your-account/fruitArchitecture
+BugReports: https://github.com/replace-with-your-account/fruitArchitecture/issues
+Depends: 
+    R (>= 4.3.0)
+Imports:
+    ggplot2,
+    rlang,
+    stats,
+    utils
+Suggests:
+    DESeq2,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0),
+    withr
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>fruitArchitecture User Manual</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">fruitArchitecture User Manual</h1>
+</header>
+<h1 id="purpose-and-scope">Purpose and scope</h1>
+<p><code>fruitArchitecture</code> reconstructs annotation-derived
+signaling organization from transcriptomic evidence. It summarizes
+significant genes within predefined modules, measures strict gene
+overlap between core modules, identifies Level 3A and Level 3B
+organization, calculates architecture metrics, performs a
+permutation-based Level 3B test, assigns an architecture class, and
+produces standard figures and export tables.</p>
+<p>The package accepts either:</p>
+<ol type="1">
+<li>a completed differential-expression table; or</li>
+<li>an RNA-seq count matrix and sample design analyzed internally with
+<code>DESeq2</code>.</li>
+</ol>
+<p>The current default architecture is <strong>PHMIES</strong>, which
+contains the core modules Plant hormone signal transduction, MAPK
+signaling, and Information exchange. The default definition also tracks
+seven additional recurrent modules: Circadian rhythm, Protein processing
+in endoplasmic reticulum, RNA transport, RNA degradation, SNARE
+interactions, Autophagy, and Sulfur relay system.</p>
+<blockquote>
+<p><strong>Development status.</strong> Version 0.1.x is an early
+research-software release. The weighted ISI, entropy, balance,
+robustness score, and class thresholds are implemented reproducibly, but
+their scientific definitions remain versioned and should be treated as
+provisional until the package methods paper and validation analyses are
+finalized.</p>
+</blockquote>
+<h1 id="installation">Installation</h1>
+<h2 id="install-from-an-extracted-source-directory">Install from an
+extracted source directory</h2>
+<p>Extract the source package so that <code>DESCRIPTION</code>,
+<code>NAMESPACE</code>, and the <code>R/</code> directory are located
+directly inside the package directory. Then install it into the first
+local library returned by <code>.libPaths()</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>user_library <span class="ot">&lt;-</span> <span class="fu">.libPaths</span>()[<span class="dv">1</span>]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  user_library,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">recursive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">showWarnings =</span> <span class="cn">FALSE</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">&quot;remotes&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">&quot;remotes&quot;</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_local</span>(</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">&quot;C:/fruitArchitecture&quot;</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">lib =</span> user_library,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">dependencies =</span> <span class="fu">c</span>(<span class="st">&quot;Depends&quot;</span>, <span class="st">&quot;Imports&quot;</span>, <span class="st">&quot;LinkingTo&quot;</span>),</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">upgrade =</span> <span class="st">&quot;never&quot;</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">force =</span> <span class="cn">TRUE</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Restart R after installation, then verify the installed version and
+location.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fruitArchitecture)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">&quot;fruitArchitecture&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">find.package</span>(<span class="st">&quot;fruitArchitecture&quot;</span>)</span></code></pre></div>
+<h2 id="optional-dependency-for-raw-count-analysis">Optional dependency
+for raw-count analysis</h2>
+<p>The DEG-table workflow does not require <code>DESeq2</code>. Install
+<code>DESeq2</code> only when using <code>fruitArchitecture()</code>
+with a count matrix.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">&quot;BiocManager&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">&quot;BiocManager&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;DESeq2&quot;</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">ask =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">update =</span> <span class="cn">FALSE</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h1 id="quick-start">Quick start</h1>
+<p>The fastest installation test is the bundled synthetic analysis.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fruitArchitectureExample</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_permutations =</span> <span class="dv">100</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">1234</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">export =</span> <span class="cn">FALSE</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>The returned object has class <code>fruit_architecture</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(result)</span></code></pre></div>
+<p>Printing the object reports the principal architecture results.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>result</span></code></pre></div>
+<h1 id="bundled-example-data">Bundled example data</h1>
+<p>The package includes four synthetic CSV files under
+<code>inst/extdata</code>. The files are installed with the package and
+can be loaded together with
+<code>fruitArchitectureExampleData()</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>example_data <span class="ot">&lt;-</span> <span class="fu">fruitArchitectureExampleData</span>()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(example_data)</span></code></pre></div>
+<p>The example is deliberately constructed to demonstrate a complete
+Class IV result. It is <strong>not</strong> a biological dataset and
+should not be used as evidence for any species or biological
+process.</p>
+<h2 id="differential-expression-table">Differential-expression
+table</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(example_data<span class="sc">$</span>deg_table)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(example_data<span class="sc">$</span>deg_table)</span></code></pre></div>
+<p>The table contains 60 synthetic genes and the following required
+columns:</p>
+<ul>
+<li><code>gene_id</code>: unique gene identifier;</li>
+<li><code>log2_fold_change</code>: signed effect size;</li>
+<li><code>adjusted_p_value</code>: multiple-testing-adjusted
+P-value.</li>
+</ul>
+<p>It also includes optional fields used for inspection and export:
+<code>base_mean</code>, <code>standard_error</code>,
+<code>statistic</code>, and <code>p_value</code>.</p>
+<h2 id="annotation-table">Annotation table</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(example_data<span class="sc">$</span>annotation)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(example_data<span class="sc">$</span>annotation)</span></code></pre></div>
+<p>The annotation table is in long format. A gene may occur in several
+rows when it belongs to several modules. The minimum required columns
+are:</p>
+<ul>
+<li><code>gene_id</code>; and</li>
+<li>either <code>module</code> or <code>pathway_name</code>.</li>
+</ul>
+<p>The bundled annotation contains assignments to all ten default
+modules. Four significant synthetic genes are assigned to all three
+PHMIES core modules and therefore qualify as strict Level 3B genes.</p>
+<h2 id="count-matrix">Count matrix</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(example_data<span class="sc">$</span>counts)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>example_data<span class="sc">$</span>counts[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, , drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span></code></pre></div>
+<p>The count matrix contains 60 genes and six samples: three immature
+and three ripe synthetic replicates. Genes are rows and samples are
+columns.</p>
+<h2 id="sample-design">Sample design</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>example_data<span class="sc">$</span>design</span></code></pre></div>
+<p>The design has one row per sample. Its row names must match the
+count-matrix column names exactly.</p>
+<h1 id="recommended-workflow-start-from-a-deg-table">Recommended
+workflow: start from a DEG table</h1>
+<p>For method development and cross-platform applications, beginning
+with a validated DEG table is the most direct workflow.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>deg_result <span class="ot">&lt;-</span> <span class="fu">fruitArchitectureFromDEG</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">deg_table =</span> example_data<span class="sc">$</span>deg_table,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation =</span> example_data<span class="sc">$</span>annotation,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">species =</span> <span class="st">&quot;synthetic fruit example&quot;</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">gene_id_col =</span> <span class="st">&quot;gene_id&quot;</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">log2fc_col =</span> <span class="st">&quot;log2_fold_change&quot;</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">padj_col =</span> <span class="st">&quot;adjusted_p_value&quot;</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="fl">0.05</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">log2fc_threshold =</span> <span class="dv">1</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">architecture_definition =</span> <span class="st">&quot;PHMIES&quot;</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_module_genes =</span> <span class="dv">1</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_interface_genes =</span> <span class="dv">1</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_permutations =</span> <span class="dv">100</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">1234</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>deg_result</span></code></pre></div>
+<h2 id="deg-decision-rule">DEG decision rule</h2>
+<p>A gene is marked significant when both conditions are met:</p>
+<pre class="text"><code>adjusted_p_value &lt;= alpha
+abs(log2_fold_change) &gt;= log2fc_threshold</code></pre>
+<p>The package records significant genes as <code>Up</code> or
+<code>Down</code>. All other genes are recorded as
+<code>Not significant</code>.</p>
+<h2 id="annotation-matching">Annotation matching</h2>
+<p>Module names may be supplied directly, or recognized aliases may be
+used. For example, the default definition maps <code>PHST</code> to
+Plant hormone signal transduction, <code>MAPK</code> to MAPK signaling,
+and <code>PPI</code> or <code>Defense</code> to Information exchange.
+Annotation text that does not match a defined module or alias is not
+used in reconstruction.</p>
+<p>Inspect the mapped annotation and coverage before interpreting the
+architecture.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>deg_result<span class="sc">$</span>input_audit</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(deg_result<span class="sc">$</span>mapped_annotation)</span></code></pre></div>
+<p>Low annotation coverage can indicate incompatible gene identifiers,
+genome release mismatch, incomplete functional annotation, or a
+genuinely limited set of architecture-relevant genes.</p>
+<h1 id="raw-count-workflow-with-deseq2">Raw-count workflow with
+DESeq2</h1>
+<p>The raw-count interface runs <code>DESeq2</code>, constructs a
+standardized DEG table, and passes the result to the same architecture
+engine used by <code>fruitArchitectureFromDEG()</code>.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>count_result <span class="ot">&lt;-</span> <span class="fu">fruitArchitecture</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">counts =</span> example_data<span class="sc">$</span>counts,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">design =</span> example_data<span class="sc">$</span>design,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">species =</span> <span class="st">&quot;synthetic fruit example&quot;</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">formula =</span> <span class="sc">~</span> condition,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">&quot;condition&quot;</span>, <span class="st">&quot;ripe&quot;</span>, <span class="st">&quot;immature&quot;</span>),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation =</span> example_data<span class="sc">$</span>annotation,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="fl">0.05</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">log2fc_threshold =</span> <span class="dv">1</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">architecture_definition =</span> <span class="st">&quot;PHMIES&quot;</span>,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_module_genes =</span> <span class="dv">1</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_interface_genes =</span> <span class="dv">1</span>,</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_permutations =</span> <span class="dv">5000</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">1234</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>count_result</span></code></pre></div>
+<h2 id="raw-count-requirements">Raw-count requirements</h2>
+<ul>
+<li>Counts must be a numeric matrix with genes in rows and samples in
+columns.</li>
+<li>Count values must be nonnegative and suitable for count-based
+analysis.</li>
+<li>Gene row names and sample column names must be unique.</li>
+<li>Design row names must contain the same sample names as the count
+matrix.</li>
+<li><code>formula</code> must be a valid R formula using columns in
+<code>design</code>.</li>
+<li><code>contrast</code> must follow the DESeq2 form
+<code>c(variable, numerator_level, denominator_level)</code>.</li>
+</ul>
+<p>The returned object additionally stores the fitted DESeq2 dataset and
+results under <code>count_result$deseq2</code>.</p>
+<h1 id="understanding-the-reconstructed-architecture">Understanding the
+reconstructed architecture</h1>
+<h2 id="level-1-module-support">Level 1: module support</h2>
+<p>A module is present when it contains at least
+<code>min_module_genes</code> significant unique genes.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>deg_result<span class="sc">$</span>module_summary</span></code></pre></div>
+<p>The table reports:</p>
+<ul>
+<li><code>annotated_genes</code>: unique input genes mapped to the
+module;</li>
+<li><code>deg_genes</code>: significant genes mapped to the module;</li>
+<li><code>up_genes</code> and <code>down_genes</code>:
+direction-specific counts;</li>
+<li><code>present</code>: whether the module passed the selected
+threshold.</li>
+</ul>
+<h2 id="level-2-pairwise-interfaces">Level 2: pairwise interfaces</h2>
+<p>An interface is supported by significant genes annotated to both
+constituent core modules. It is present when the strict overlap contains
+at least <code>min_interface_genes</code> unique genes.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>deg_result<span class="sc">$</span>interface_summary</span></code></pre></div>
+<p>The default PHMIES interfaces are:</p>
+<ul>
+<li>Hormone-MAPK;</li>
+<li>Hormone-Information exchange;</li>
+<li>MAPK-Information exchange.</li>
+</ul>
+<h2 id="level-3a">Level 3A</h2>
+<p>Level 3A is present when:</p>
+<ol type="1">
+<li>all three PHMIES core modules are present; and</li>
+<li>all three required pairwise interfaces are present.</li>
+</ol>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>deg_result<span class="sc">$</span>level3a_present</span></code></pre></div>
+<h2 id="level-3b">Level 3B</h2>
+<p>A strict Level 3B gene is a significant gene assigned to all three
+PHMIES core modules in the same analysis.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>deg_result<span class="sc">$</span>level3b_count</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>deg_result<span class="sc">$</span>level3b_genes</span></code></pre></div>
+<p>Level 3A and Level 3B are separate results. Level 3A describes
+recovery of the complete three-module interface architecture; Level 3B
+identifies strict genes occupying the three-way overlap.</p>
+<h1 id="architecture-metrics">Architecture metrics</h1>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>deg_result<span class="sc">$</span>metrics</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>deg_result<span class="sc">$</span>robustness</span></code></pre></div>
+<h2 id="weighted-isi">Weighted ISI</h2>
+<p>The current weighted ISI combines four components:</p>
+<ul>
+<li>fraction of Level 1 modules present: weight 0.25;</li>
+<li>fraction of Level 2 interfaces present: weight 0.35;</li>
+<li>Level 3A presence: weight 0.20;</li>
+<li>any Level 3B presence: weight 0.20.</li>
+</ul>
+<p>The score ranges from 0 to 1. The implementation records a metric
+version so future changes can be tracked.</p>
+<h2 id="architecture-entropy">Architecture entropy</h2>
+<p>The current entropy statistic is normalized Shannon entropy
+calculated from the significant-gene counts of the three core modules. A
+larger value indicates more even distribution of core-module
+support.</p>
+<h2 id="architecture-balance">Architecture balance</h2>
+<p>The current balance statistic is the minimum core-module DEG count
+divided by the maximum core-module DEG count. A value of 1 indicates
+equal counts across the three core modules.</p>
+<h2 id="architecture-class">Architecture class</h2>
+<p>The current rules are:</p>
+<ul>
+<li><strong>Class IV:</strong> Level 3A is present and at least one
+strict Level 3B gene exists.</li>
+<li><strong>Class III:</strong> Level 3A is present, or at least
+two-thirds of required interfaces are present.</li>
+<li><strong>Class II:</strong> at least half of Level 1 modules are
+present, or at least one required interface is present.</li>
+<li><strong>Class I:</strong> none of the preceding conditions are
+met.</li>
+</ul>
+<h2 id="robustness-label">Robustness label</h2>
+<p>The current preliminary score averages weighted ISI, balance,
+entropy, and annotation coverage, then adds 0.10 when the Level 3B
+permutation P-value is at most 0.05. Scores are labeled High at 0.75 or
+greater, Moderate at 0.50 to less than 0.75, and Low below 0.50.</p>
+<p>This score is an analytical summary, not yet a substitute for sample
+bootstrapping, annotation sensitivity analysis, or independent
+biological validation.</p>
+<h1 id="level-3b-permutation-test">Level 3B permutation test</h1>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>deg_result<span class="sc">$</span>null_model[<span class="fu">c</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;method&quot;</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;n_permutations&quot;</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;expected&quot;</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;observed&quot;</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;p_value&quot;</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>)]</span></code></pre></div>
+<p>The default null model randomly assigns the observed number of DEG
+labels among input genes while preserving the annotation memberships.
+For each permutation, the package counts how many strict
+triple-annotated genes receive a DEG label. The empirical P-value uses a
+finite-permutation correction and therefore cannot be zero.</p>
+<p>For final analyses, use a substantially larger number of permutations
+than the 100 used in this vignette, for example:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>n_permutations <span class="ot">=</span> <span class="dv">10000</span></span></code></pre></div>
+<h1 id="inspecting-the-returned-object">Inspecting the returned
+object</h1>
+<p>The main components are:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(deg_result)</span></code></pre></div>
+<ul>
+<li><code>call</code>: reconstructed function call;</li>
+<li><code>metadata</code>: species, architecture version, thresholds,
+and seed;</li>
+<li><code>input_audit</code>: gene counts and annotation coverage;</li>
+<li><code>differential_expression</code>: standardized DEG table;</li>
+<li><code>mapped_annotation</code>: recognized gene-module
+assignments;</li>
+<li><code>gene_membership</code>: gene-level architecture membership and
+Level 3B status;</li>
+<li><code>module_summary</code>: Level 1 support;</li>
+<li><code>interface_summary</code>: Level 2 support;</li>
+<li><code>level3a_present</code>: logical Level 3A result;</li>
+<li><code>level3b_genes</code> and <code>level3b_count</code>: strict
+Level 3B result;</li>
+<li><code>metrics</code>: weighted ISI, entropy, balance, and component
+fractions;</li>
+<li><code>null_model</code>: permutation method, expectation, P-value,
+and distribution;</li>
+<li><code>architecture_class</code>: Class I-IV;</li>
+<li><code>robustness</code>: current composite score and label;</li>
+<li><code>definition</code>: full architecture definition used;</li>
+<li><code>provenance</code>: package version, R version, and analysis
+time.</li>
+</ul>
+<p>Use <code>summary()</code> for a compact structured view.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(deg_result)</span></code></pre></div>
+<h1 id="figures">Figures</h1>
+<p><code>plot()</code> returns a <code>ggplot</code> object and supports
+three standard types.</p>
+<h2 id="module-support-plot">Module-support plot</h2>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(deg_result, <span class="at">type =</span> <span class="st">&quot;modules&quot;</span>)</span></code></pre></div>
+<h2 id="interface-support-plot">Interface-support plot</h2>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(deg_result, <span class="at">type =</span> <span class="st">&quot;interfaces&quot;</span>)</span></code></pre></div>
+<h2 id="level-3b-null-distribution">Level 3B null distribution</h2>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(deg_result, <span class="at">type =</span> <span class="st">&quot;null&quot;</span>)</span></code></pre></div>
+<p>Because the returned plots are <code>ggplot2</code> objects, users
+can add labels, themes, or other layers before saving them.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">plot</span>(deg_result, <span class="at">type =</span> <span class="st">&quot;modules&quot;</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> ggplot2<span class="sc">::</span><span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">&quot;Custom analysis subtitle&quot;</span>)</span></code></pre></div>
+<h1 id="exporting-results">Exporting results</h1>
+<h2 id="export-tables-and-the-complete-object">Export tables and the
+complete object</h2>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>output_directory <span class="ot">&lt;-</span> <span class="fu">file.path</span>(</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">getwd</span>(),</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;fruitArchitecture_results&quot;</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">exportArchitecture</span>(</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  deg_result,</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">directory =</span> output_directory,</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">prefix =</span> <span class="st">&quot;my_contrast&quot;</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>This writes:</p>
+<ul>
+<li>standardized differential-expression table;</li>
+<li>gene-level architecture membership table;</li>
+<li>module summary;</li>
+<li>interface summary;</li>
+<li>one-row architecture summary;</li>
+<li>complete <code>fruit_architecture</code> object as an RDS file.</li>
+</ul>
+<p>Reload the complete object with:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>restored_result <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">file.path</span>(output_directory, <span class="st">&quot;my_contrast_object.rds&quot;</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h2 id="export-figures">Export figures</h2>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exportFigures</span>(</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  deg_result,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">directory =</span> <span class="fu">file.path</span>(output_directory, <span class="st">&quot;figures&quot;</span>),</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">formats =</span> <span class="fu">c</span>(<span class="st">&quot;pdf&quot;</span>, <span class="st">&quot;png&quot;</span>, <span class="st">&quot;tiff&quot;</span>),</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">width =</span> <span class="dv">9</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">height =</span> <span class="dv">6</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">dpi =</span> <span class="dv">600</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>PDF is vector output. PNG and TIFF are raster outputs. Use TIFF at
+600 dpi when required by a journal, and retain PDF for editing and
+archiving.</p>
+<h1 id="using-custom-column-names">Using custom column names</h1>
+<p>A DEG table may use different field names. Supply the relevant names
+explicitly.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fruitArchitectureFromDEG</span>(</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">deg_table =</span> my_results,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation =</span> my_annotation,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">species =</span> <span class="st">&quot;Malus domestica&quot;</span>,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">gene_id_col =</span> <span class="st">&quot;gene&quot;</span>,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">log2fc_col =</span> <span class="st">&quot;logFC&quot;</span>,</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">padj_col =</span> <span class="st">&quot;FDR&quot;</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>The annotation gene-identifier column must have the same name passed
+in <code>gene_id_col</code>. Annotation must also include either
+<code>module</code> or <code>pathway_name</code>.</p>
+<h1 id="using-a-custom-architecture-definition">Using a custom
+architecture definition</h1>
+<p>Advanced users may pass a list instead of <code>"PHMIES"</code>. A
+custom definition must contain:</p>
+<ul>
+<li><code>name</code>;</li>
+<li><code>modules</code>;</li>
+<li><code>core_modules</code>;</li>
+<li><code>interfaces</code>;</li>
+<li><code>weights</code>.</li>
+</ul>
+<p>For reliable annotation matching, it should also contain
+<code>aliases</code>.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>custom_definition <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">&quot;MyArchitecture&quot;</span>,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="st">&quot;1.0.0&quot;</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">modules =</span> <span class="fu">c</span>(<span class="st">&quot;Module A&quot;</span>, <span class="st">&quot;Module B&quot;</span>, <span class="st">&quot;Module C&quot;</span>),</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">aliases =</span> <span class="fu">list</span>(</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Module A&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;module a&quot;</span>, <span class="st">&quot;a&quot;</span>),</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Module B&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;module b&quot;</span>, <span class="st">&quot;b&quot;</span>),</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Module C&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;module c&quot;</span>, <span class="st">&quot;c&quot;</span>)</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">core_modules =</span> <span class="fu">c</span>(<span class="st">&quot;Module A&quot;</span>, <span class="st">&quot;Module B&quot;</span>, <span class="st">&quot;Module C&quot;</span>),</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">interfaces =</span> <span class="fu">data.frame</span>(</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">interface =</span> <span class="fu">c</span>(<span class="st">&quot;A-B&quot;</span>, <span class="st">&quot;A-C&quot;</span>, <span class="st">&quot;B-C&quot;</span>),</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">module_a =</span> <span class="fu">c</span>(<span class="st">&quot;Module A&quot;</span>, <span class="st">&quot;Module A&quot;</span>, <span class="st">&quot;Module B&quot;</span>),</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">module_b =</span> <span class="fu">c</span>(<span class="st">&quot;Module B&quot;</span>, <span class="st">&quot;Module C&quot;</span>, <span class="st">&quot;Module C&quot;</span>),</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights =</span> <span class="fu">list</span>(</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">level1 =</span> <span class="fl">0.25</span>,</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">level2 =</span> <span class="fl">0.35</span>,</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">level3a =</span> <span class="fl">0.20</span>,</span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">level3b =</span> <span class="fl">0.20</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>custom_result <span class="ot">&lt;-</span> <span class="fu">fruitArchitectureFromDEG</span>(</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">deg_table =</span> my_results,</span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation =</span> my_annotation,</span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">architecture_definition =</span> custom_definition</span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h1 id="species-support">Species support</h1>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">supportedSpecies</span>()</span></code></pre></div>
+<p>In version 0.1.x, the registry lists planned species, but built-in
+genome-release annotations are not yet distributed. Users must supply an
+annotation table. The <code>species</code> argument is currently a label
+stored in the result; it does not select a built-in annotation
+resource.</p>
+<h1 id="common-problems">Common problems</h1>
+<h2
+id="no-annotation-rows-matched"><code>No annotation rows matched</code></h2>
+<p>Check that:</p>
+<ul>
+<li>the annotation contains <code>gene_id</code> and <code>module</code>
+or <code>pathway_name</code>;</li>
+<li>gene identifiers match those in the DEG table;</li>
+<li>module names or aliases match the selected architecture
+definition;</li>
+<li>no genome-build or annotation-release mismatch is present.</li>
+</ul>
+<h2 id="annotation-coverage-is-unexpectedly-low">Annotation coverage is
+unexpectedly low</h2>
+<p>Inspect:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>result<span class="sc">$</span>input_audit</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(result<span class="sc">$</span>mapped_annotation)</span></code></pre></div>
+<p>Low coverage should be resolved before comparing species or
+experiments.</p>
+<h2 id="deseq2-is-required"><code>DESeq2</code> is required</h2>
+<p>Install <code>DESeq2</code>, or analyze differential expression
+separately and use <code>fruitArchitectureFromDEG()</code>.</p>
+<h2 id="no-null-plot-is-available">No null plot is available</h2>
+<p>The null plot is unavailable when <code>n_permutations = 0</code>.
+Re-run the analysis with at least one permutation; use thousands for
+inferential work.</p>
+<h2 id="windows-package-reinstall-warnings">Windows package reinstall
+warnings</h2>
+<p>Close all R and RStudio sessions before updating packages that
+contain loaded DLL files. Remove stale <code>00LOCK</code> directories
+only after all R processes have closed.</p>
+<h1 id="reproducibility-checklist">Reproducibility checklist</h1>
+<p>For a reportable analysis, retain:</p>
+<ol type="1">
+<li>the original counts or DEG table;</li>
+<li>the sample design and contrast definition;</li>
+<li>the full annotation table and its source/version;</li>
+<li>package and architecture-definition versions;</li>
+<li><code>alpha</code>, fold-change threshold, overlap thresholds,
+permutations, and seed;</li>
+<li>the exported RDS result object;</li>
+<li><code>sessionInfo()</code> output.</li>
+</ol>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+</body>
+</html>

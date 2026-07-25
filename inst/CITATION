@@ -1,0 +1,9 @@
+citHeader("To cite fruitArchitecture in publications, use:")
+
+bibentry(
+  bibtype = "Manual",
+  title = "fruitArchitecture: Reconstruct and Quantify Higher-Order Signaling Architectures",
+  author = person("Franklin T.", "Johnson"),
+  year = "2026",
+  note = "R package version 0.1.0"
+)

@@ -1,0 +1,158 @@
+---
+title: "Getting started with fruitArchitecture"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with fruitArchitecture}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(fruitArchitecture)
+```
+
+# Overview
+
+`fruitArchitecture` separates differential-expression analysis from
+architecture reconstruction. Users can begin with either a validated DEG table
+or a raw RNA-seq count matrix.
+
+# Installation into the user library
+
+```{r installation, eval=FALSE}
+user_library <- .libPaths()[1]
+dir.create(user_library, recursive = TRUE, showWarnings = FALSE)
+
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes", lib = user_library)
+}
+
+remotes::install_local(
+  "C:/path/to/fruitArchitecture",
+  lib = user_library,
+  dependencies = c("Depends", "Imports", "LinkingTo"),
+  upgrade = "never",
+  force = TRUE
+)
+```
+
+Install DESeq2 only when raw counts will be analyzed:
+
+```{r deseq2-installation, eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
+BiocManager::install("DESeq2", ask = FALSE, update = FALSE)
+```
+
+# Included example files
+
+```{r example-files}
+example_directory <- system.file("extdata", package = "fruitArchitecture")
+list.files(example_directory)
+```
+
+# Recommended DEG-table workflow
+
+```{r deg-workflow}
+deg_table <- utils::read.csv(
+  file.path(example_directory, "fruitArchitecture_example_deg.csv"),
+  check.names = FALSE
+)
+
+annotation <- utils::read.csv(
+  file.path(example_directory, "fruitArchitecture_example_annotation.csv"),
+  check.names = FALSE
+)
+
+result <- fruitArchitectureFromDEG(
+  deg_table = deg_table,
+  annotation = annotation,
+  species = "synthetic fruit example",
+  n_permutations = 1000,
+  seed = 1234
+)
+
+result
+```
+
+```{r result-tables}
+result$module_summary
+result$interface_summary
+result$level3b_genes
+```
+
+# Figures
+
+```{r module-figure, fig.width=8, fig.height=5}
+plot(result, type = "modules")
+```
+
+```{r interface-figure, fig.width=8, fig.height=5}
+plot(result, type = "interfaces")
+```
+
+```{r null-figure, fig.width=8, fig.height=5}
+plot(result, type = "null")
+```
+
+# Export a complete example analysis
+
+```{r export, eval=FALSE}
+output_directory <- file.path(getwd(), "fruitArchitecture_example_output")
+
+exportArchitecture(
+  result,
+  directory = output_directory,
+  prefix = "synthetic_example"
+)
+
+exportFigures(
+  result,
+  directory = file.path(output_directory, "figures"),
+  formats = c("pdf", "png", "tiff"),
+  width = 9,
+  height = 6,
+  dpi = 600
+)
+```
+
+# Raw-count workflow
+
+```{r count-workflow, eval=FALSE}
+counts_data <- utils::read.csv(
+  file.path(example_directory, "fruitArchitecture_example_counts.csv"),
+  row.names = 1,
+  check.names = FALSE
+)
+counts <- as.matrix(counts_data)
+storage.mode(counts) <- "integer"
+
+design <- utils::read.csv(
+  file.path(example_directory, "fruitArchitecture_example_design.csv"),
+  row.names = 1,
+  check.names = FALSE
+)
+design$condition <- factor(design$condition, levels = c("immature", "ripe"))
+
+count_result <- fruitArchitecture(
+  counts = counts,
+  design = design,
+  species = "synthetic fruit example",
+  formula = ~ condition,
+  contrast = c("condition", "ripe", "immature"),
+  annotation = annotation,
+  n_permutations = 1000,
+  seed = 1234
+)
+
+count_result
+```
+
+# Input requirements
+
+The DEG table must contain unique gene identifiers, log2 fold changes, and
+adjusted P-values. Annotation must be long format, with one row for each
+gene-module assignment. A strict Level 3B member is a significant gene assigned
+to all three PHMIES core modules in the selected architecture definition.

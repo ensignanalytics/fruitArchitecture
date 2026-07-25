@@ -1,0 +1,11 @@
+"module","annotated_genes","deg_genes","up_genes","down_genes","present"
+"Circadian rhythm",5,1,0,1,TRUE
+"Plant hormone signal transduction",13,9,8,1,TRUE
+"MAPK signaling",13,9,8,1,TRUE
+"Information exchange",13,9,8,1,TRUE
+"Protein processing in endoplasmic reticulum",5,1,0,1,TRUE
+"RNA transport",5,1,0,1,TRUE
+"RNA degradation",5,1,0,1,TRUE
+"SNARE interactions",5,1,0,1,TRUE
+"Autophagy",5,1,0,1,TRUE
+"Sulfur relay system",5,1,0,1,TRUE
