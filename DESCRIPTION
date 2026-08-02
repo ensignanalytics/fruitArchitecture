@@ -6,7 +6,7 @@ Authors@R:
       given = "Franklin T.",
       family = "Johnson",
       role = c("aut", "cre"),
-      email = "replace-with-your-email@example.com"
+      email = "franklin@ensignanalytics.com"
     )
 Description: Reconstructs annotation-derived signaling modules, pairwise
     interfaces, and higher-order organizational architectures from
