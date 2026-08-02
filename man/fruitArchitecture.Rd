@@ -14,6 +14,9 @@ fruitArchitecture(
   alpha = 0.05,
   log2fc_threshold = 1,
   architecture_definition = "PHMIES",
+  module_definition = NULL,
+  circuit_definition = "none",
+  regulatory_overlay = NULL,
   min_module_genes = 1L,
   min_interface_genes = 1L,
   n_permutations = 10000L,
@@ -39,7 +42,20 @@ fruitArchitecture(
 
 \item{log2fc_threshold}{Absolute log2 fold-change threshold.}
 
-\item{architecture_definition}{Architecture definition.}
+\item{architecture_definition}{Architecture rule system. The default
+\code{"PHMIES"} preserves frozen v0.1 behavior. Use \code{"paper5_frozen"} for
+the Broad6 Paper 5 rules. A custom definition list is also accepted.}
+
+\item{module_definition}{Module-assignment system. Use \code{NULL} to select
+the module definition required by \code{architecture_definition}. Built-in
+values are \code{"core10"} and \code{"broad6"}.}
+
+\item{circuit_definition}{Directed-circuit rule system. The default
+\code{"none"} preserves legacy behavior. Use
+\code{"autocatalytic_ethylene_v1"} for the frozen ethylene circuit.}
+
+\item{regulatory_overlay}{Optional data frame or named list containing
+experimentally supported regulatory nodes and directed edges.}
 
 \item{min_module_genes}{Minimum significant genes per module.}
 

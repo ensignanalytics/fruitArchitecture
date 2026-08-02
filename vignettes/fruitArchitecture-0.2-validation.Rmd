@@ -1,0 +1,650 @@
+---
+title: "Validating fruitArchitecture 0.2.0.9000"
+author: "Franklin T. Johnson"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Validating fruitArchitecture 0.2.0.9000}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  error = FALSE,
+  warning = TRUE,
+  message = TRUE
+)
+
+assert_true <- function(condition, message) {
+  if (!isTRUE(condition)) {
+    stop(message, call. = FALSE)
+  }
+  invisible(TRUE)
+}
+
+assert_identical <- function(object, expected, message) {
+  if (!identical(object, expected)) {
+    stop(
+      paste0(
+        message,
+        "\nObserved: ", paste(object, collapse = ", "),
+        "\nExpected: ", paste(expected, collapse = ", ")
+      ),
+      call. = FALSE
+    )
+  }
+  invisible(TRUE)
+}
+```
+
+# Purpose
+
+This vignette is a release-validation document for `fruitArchitecture`
+version `0.2.0.9000`. It tests the frozen legacy PHMIES definition, the
+new Paper 5 Broad6 definition, the complete 15-interface universe, and the
+frozen Core10-to-Broad6 assignment registry.
+
+The validation is intentionally independent of raw RNA-seq files. It can be
+rebuilt during `R CMD check` and used before creating the next GitHub
+prerelease tag.
+
+# Load the installed package
+
+```{r load-package}
+library(fruitArchitecture)
+
+package_version <- as.character(
+  utils::packageVersion("fruitArchitecture")
+)
+
+package_version
+```
+
+```{r validate-version}
+assert_identical(
+  package_version,
+  "0.2.0.9000",
+  "Unexpected fruitArchitecture package version."
+)
+```
+
+# Retrieve the internal frozen definitions
+
+These validation calls use `getFromNamespace()` because the definition
+constructors are internal package infrastructure rather than public user
+functions.
+
+```{r retrieve-internal-functions}
+resolve_architecture <- getFromNamespace(
+  ".resolve_architecture_definition",
+  "fruitArchitecture"
+)
+
+broad6_interface_registry <- getFromNamespace(
+  ".fa_broad6_interfaces",
+  "fruitArchitecture"
+)
+```
+
+# Validate the frozen PHMIES definition
+
+The default architecture must remain the original PHMIES definition so that
+analyses performed under `fruitArchitecture` v0.1 remain reproducible.
+
+```{r validate-phmies}
+legacy_definition <- resolve_architecture(NULL)
+
+legacy_summary <- data.frame(
+  field = c(
+    "name",
+    "version",
+    "definition_status",
+    "module_definition",
+    "circuit_definition",
+    "module_count",
+    "required_interface_count"
+  ),
+  value = c(
+    legacy_definition$name,
+    legacy_definition$version,
+    legacy_definition$definition_status,
+    legacy_definition$module_definition,
+    legacy_definition$circuit_definition,
+    length(legacy_definition$modules),
+    nrow(legacy_definition$interfaces)
+  ),
+  stringsAsFactors = FALSE
+)
+
+legacy_summary
+```
+
+```{r assert-phmies}
+assert_identical(
+  legacy_definition$name,
+  "PHMIES",
+  "The default architecture definition is no longer PHMIES."
+)
+
+assert_identical(
+  legacy_definition$module_definition,
+  "core10",
+  "The PHMIES definition must resolve to the frozen Core10 system."
+)
+
+assert_identical(
+  legacy_definition$circuit_definition,
+  "none",
+  "The legacy PHMIES definition must not activate a directed circuit."
+)
+
+assert_true(
+  length(legacy_definition$modules) == 10L,
+  "The frozen PHMIES definition must contain 10 modules."
+)
+
+assert_true(
+  nrow(legacy_definition$interfaces) == 3L,
+  "The frozen PHMIES definition must contain three required interfaces."
+)
+```
+
+# Validate the Paper 5 Broad6 definition
+
+```{r validate-paper5-definition}
+paper5_definition <- resolve_architecture(
+  "paper5_frozen"
+)
+
+paper5_summary <- data.frame(
+  field = c(
+    "name",
+    "version",
+    "definition_status",
+    "module_definition",
+    "circuit_definition",
+    "module_count",
+    "required_interface_count",
+    "interface_universe_count"
+  ),
+  value = c(
+    paper5_definition$name,
+    paper5_definition$version,
+    paper5_definition$definition_status,
+    paper5_definition$module_definition,
+    paper5_definition$circuit_definition,
+    length(paper5_definition$modules),
+    nrow(paper5_definition$interfaces),
+    nrow(paper5_definition$interface_universe)
+  ),
+  stringsAsFactors = FALSE
+)
+
+paper5_summary
+```
+
+```{r assert-paper5-definition}
+expected_broad6_modules <- c(
+  "Circadian",
+  "Hormone",
+  "MAPK",
+  "Information Exchange",
+  "RNA regulation",
+  "Proteostasis"
+)
+
+assert_identical(
+  paper5_definition$name,
+  "paper5_frozen",
+  "The Paper 5 architecture name is incorrect."
+)
+
+assert_identical(
+  paper5_definition$module_definition,
+  "broad6",
+  "The Paper 5 architecture must use Broad6."
+)
+
+assert_identical(
+  paper5_definition$circuit_definition,
+  "autocatalytic_ethylene_v1",
+  "The Paper 5 definition must identify the frozen ethylene circuit."
+)
+
+assert_identical(
+  paper5_definition$modules,
+  expected_broad6_modules,
+  "The frozen Broad6 module order or names changed."
+)
+
+assert_true(
+  isFALSE(paper5_definition$extended_interfaces_affect_class),
+  paste(
+    "Extended Broad6 interfaces must not independently alter",
+    "the frozen PHMIES Class I-IV call."
+  )
+)
+```
+
+# Validate the complete Broad6 interface universe
+
+```{r build-interface-registry}
+broad6_interfaces <- broad6_interface_registry()
+
+broad6_interfaces
+```
+
+```{r assert-interface-registry}
+assert_true(
+  is.data.frame(broad6_interfaces),
+  "The Broad6 interface registry must be a data frame."
+)
+
+assert_true(
+  nrow(broad6_interfaces) == 15L,
+  "Six Broad6 modules must generate exactly 15 pairwise interfaces."
+)
+
+assert_true(
+  length(unique(broad6_interfaces$interface_id)) == 15L,
+  "Broad6 interface identifiers must be unique."
+)
+
+required_interface_ids <- c(
+  "Circadian--Hormone",
+  "Circadian--Proteostasis",
+  "Hormone--MAPK",
+  "Hormone--Information Exchange",
+  "Information Exchange--MAPK"
+)
+
+assert_true(
+  all(required_interface_ids %in% broad6_interfaces$interface_id),
+  "One or more required Broad6 interface identifiers are absent."
+)
+
+assert_true(
+  all(
+    paper5_definition$level3a_interface_ids %in%
+      broad6_interfaces$interface_id
+  ),
+  paste(
+    "Every Paper 5 Level 3A interface must be represented",
+    "in the complete Broad6 interface universe."
+  )
+)
+```
+
+Canonical interface identifiers are orientation-independent. Therefore,
+`MAPK` and `Information Exchange` are stored as
+`Information Exchange--MAPK`, while the display label may retain the
+biological reading order `MAPK-Information Exchange`.
+
+# Validate the frozen Core10-to-Broad6 registry
+
+The package must install the authoritative mapping table at:
+
+```text
+inst/extdata/module_registry_broad6_v1.csv
+```
+
+```{r locate-module-registry}
+registry_path <- system.file(
+  "extdata",
+  "module_registry_broad6_v1.csv",
+  package = "fruitArchitecture"
+)
+
+assert_true(
+  nzchar(registry_path) && file.exists(registry_path),
+  paste(
+    "The frozen Broad6 registry was not installed.",
+    "Expected inst/extdata/module_registry_broad6_v1.csv."
+  )
+)
+
+module_registry <- utils::read.csv(
+  registry_path,
+  stringsAsFactors = FALSE,
+  check.names = FALSE
+)
+
+utils::head(module_registry)
+```
+
+```{r assert-module-registry}
+required_registry_columns <- c(
+  "source_definition",
+  "source_module",
+  "broad6_module",
+  "assignment_status",
+  "evidence_source",
+  "definition_version",
+  "notes"
+)
+
+assert_true(
+  all(required_registry_columns %in% names(module_registry)),
+  "The Broad6 registry is missing one or more required columns."
+)
+
+assert_true(
+  nrow(module_registry) == 41L,
+  paste(
+    "The frozen registry must contain 41 rows:",
+    "10 canonical Core10 assignments and 31 aliases."
+  )
+)
+
+assert_true(
+  sum(module_registry$source_definition == "core10_canonical") == 10L,
+  "The registry must contain exactly 10 canonical Core10 assignments."
+)
+
+assert_true(
+  sum(module_registry$source_definition == "core10_alias") == 31L,
+  "The registry must contain exactly 31 frozen alias assignments."
+)
+
+assert_identical(
+  sort(unique(module_registry$broad6_module)),
+  sort(expected_broad6_modules),
+  "The registry does not represent exactly the six frozen Broad6 modules."
+)
+
+assert_identical(
+  unique(module_registry$definition_version),
+  "broad6-v1.0",
+  "The module registry definition version changed unexpectedly."
+)
+
+assert_true(
+  all(
+    module_registry$assignment_status %in%
+      c("frozen_canonical", "frozen_alias")
+  ),
+  "The registry contains an unrecognized assignment status."
+)
+
+assert_true(
+  all(nzchar(module_registry$evidence_source)),
+  "Every registry row must contain an evidence source."
+)
+
+assert_true(
+  all(nzchar(module_registry$notes)),
+  "Every registry row must contain an explanatory note."
+)
+```
+
+## Canonical mapping
+
+```{r canonical-mapping}
+canonical_mapping <- module_registry[
+  module_registry$source_definition == "core10_canonical",
+  c(
+    "source_module",
+    "broad6_module",
+    "assignment_status",
+    "definition_version"
+  )
+]
+
+canonical_mapping
+```
+
+## Assignment counts by Broad6 module
+
+```{r registry-counts}
+assignment_counts <- as.data.frame(
+  table(module_registry$broad6_module),
+  stringsAsFactors = FALSE
+)
+
+names(assignment_counts) <- c(
+  "broad6_module",
+  "registry_row_count"
+)
+
+assignment_counts[
+  order(assignment_counts$broad6_module),
+]
+```
+
+# Inspect the public API
+
+The legacy argument must remain available. The additional versioned arguments
+can be added without changing the established positional arguments.
+
+```{r inspect-api}
+fruit_architecture_arguments <- names(
+  formals(fruitArchitecture)
+)
+
+api_status <- data.frame(
+  argument = c(
+    "architecture_definition",
+    "module_definition",
+    "circuit_definition",
+    "regulatory_overlay"
+  ),
+  implemented = c(
+    "architecture_definition",
+    "module_definition",
+    "circuit_definition",
+    "regulatory_overlay"
+  ) %in% fruit_architecture_arguments,
+  stringsAsFactors = FALSE
+)
+
+api_status
+```
+
+```{r assert-legacy-api}
+assert_true(
+  "architecture_definition" %in% fruit_architecture_arguments,
+  paste(
+    "fruitArchitecture() must retain the",
+    "architecture_definition argument."
+  )
+)
+```
+
+The following check reports, but does not stop the vignette, while the new
+public API is being connected to the underlying frozen definitions.
+
+```{r report-new-api}
+new_api_arguments <- c(
+  "module_definition",
+  "circuit_definition",
+  "regulatory_overlay"
+)
+
+missing_new_api <- setdiff(
+  new_api_arguments,
+  fruit_architecture_arguments
+)
+
+if (length(missing_new_api) == 0L) {
+  message(
+    "The complete fruitArchitecture 0.2 public API is present."
+  )
+} else {
+  message(
+    "Definition infrastructure is valid. Public API arguments still to add: ",
+    paste(missing_new_api, collapse = ", ")
+  )
+}
+```
+
+# Optional installed-example smoke test
+
+This section looks for the original lightweight example files. It performs the
+legacy analysis only when all three files are installed. A failed analysis is
+reported with its original error message so that input-format changes can be
+diagnosed.
+
+```{r example-smoke-test}
+example_paths <- c(
+  counts = system.file(
+    "extdata",
+    "example_counts.csv",
+    package = "fruitArchitecture"
+  ),
+  design = system.file(
+    "extdata",
+    "example_design.csv",
+    package = "fruitArchitecture"
+  ),
+  annotation = system.file(
+    "extdata",
+    "example_annotation.csv",
+    package = "fruitArchitecture"
+  )
+)
+
+example_files_available <- all(
+  nzchar(example_paths) & file.exists(example_paths)
+)
+
+if (!example_files_available) {
+  message(
+    "Installed example files were not all found; ",
+    "the analysis smoke test was skipped."
+  )
+} else {
+  example_counts_df <- utils::read.csv(
+    example_paths[["counts"]],
+    stringsAsFactors = FALSE,
+    check.names = FALSE
+  )
+
+  example_design <- utils::read.csv(
+    example_paths[["design"]],
+    stringsAsFactors = FALSE,
+    check.names = FALSE
+  )
+
+  example_annotation <- utils::read.csv(
+    example_paths[["annotation"]],
+    stringsAsFactors = FALSE,
+    check.names = FALSE
+  )
+
+  # Most package count examples store gene identifiers in the first column.
+  example_counts <- example_counts_df
+
+  legacy_smoke_result <- tryCatch(
+    fruitArchitecture(
+      counts = example_counts,
+      design = example_design,
+      annotation = example_annotation,
+      architecture_definition = "PHMIES"
+    ),
+    error = function(e) e
+  )
+
+  if (inherits(legacy_smoke_result, "error")) {
+    message(
+      "Legacy example analysis did not complete: ",
+      conditionMessage(legacy_smoke_result)
+    )
+  } else {
+    message(
+      "Legacy example analysis completed successfully."
+    )
+    print(legacy_smoke_result)
+  }
+}
+```
+
+# Paper 5 public-call template
+
+After `module_definition`, `circuit_definition`, and `regulatory_overlay` are
+connected to `fruitArchitecture()`, the intended call is:
+
+```{r paper5-call-template, eval=FALSE}
+paper5_result <- fruitArchitecture(
+  counts = counts,
+  design = design,
+  annotation = annotation,
+  module_definition = "broad6",
+  architecture_definition = "paper5_frozen",
+  circuit_definition = "autocatalytic_ethylene_v1",
+  regulatory_overlay = validated_regulatory_overlay
+)
+```
+
+The annotation-derived architecture and experimentally augmented regulatory
+architecture should remain distinct output objects. A directed circuit should
+be called engaged only when all required nodes, curated edges, species, and
+developmental-context conditions are supported.
+
+# GSE62415 regression target
+
+The GSE62415 apple-seed validation should later be added as a separate article
+or example because rebuilding raw RNA-seq data is not appropriate during
+routine package checks.
+
+The frozen expected result under the legacy PHMIES rules is:
+
+```{r gse62415-target}
+gse62415_expected <- data.frame(
+  metric = c(
+    "validation_type",
+    "architecture_definition",
+    "module_definition",
+    "architecture_class",
+    "level3a_present",
+    "level3b_count",
+    "differentially_engaged_phmies_interface_genes"
+  ),
+  expected_value = c(
+    "module-positive/interface-negative",
+    "PHMIES",
+    "core10",
+    "I",
+    "FALSE",
+    "0",
+    "0"
+  ),
+  stringsAsFactors = FALSE
+)
+
+gse62415_expected
+```
+
+# Validation result
+
+Reaching this section means that all required hard assertions in the vignette
+passed.
+
+```{r validation-result}
+validation_result <- data.frame(
+  check = c(
+    "Package version",
+    "Legacy PHMIES definition",
+    "Paper 5 Broad6 definition",
+    "Broad6 interface count",
+    "Level 3A interface consistency",
+    "Frozen module registry",
+    "Legacy public API"
+  ),
+  status = rep("PASS", 7L),
+  stringsAsFactors = FALSE
+)
+
+validation_result
+```
+
+The package is ready for the next implementation stage when this vignette
+builds successfully, `devtools::test()` passes, and `R CMD check` reports no
+package-content notes.

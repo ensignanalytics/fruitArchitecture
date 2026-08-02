@@ -4,7 +4,7 @@
 \alias{.resolve_architecture_definition}
 \title{Resolve an architecture definition}
 \usage{
-.resolve_architecture_definition(x)
+.resolve_architecture_definition(x = NULL)
 }
 \arguments{
 \item{x}{Either \code{NULL}, the name of a built-in architecture definition,
