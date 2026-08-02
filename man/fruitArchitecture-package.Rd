@@ -18,7 +18,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Franklin T. Johnson \email{replace-with-your-email@example.com}
+\strong{Maintainer}: Franklin T. Johnson \email{franklin@ensignanalytics.com}
 
 }
 \keyword{internal}
