@@ -1,5 +1,6 @@
 #' Default PHMIES architecture definition
 #'
+#' @keywords internal
 #' @return A named list containing module names, aliases, pairwise interfaces,
 #'   Level 3A requirements, and metric weights.
 #' @keywords internal

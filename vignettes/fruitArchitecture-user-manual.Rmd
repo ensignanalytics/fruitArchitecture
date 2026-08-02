@@ -465,20 +465,36 @@ summary(deg_result)
 
 ## Module-support plot
 
-```{r module-plot}
-plot(deg_result, type = "modules")
+```{r module-plot, fig.alt="Horizontal bar chart showing the number of significant genes assigned to each fruit architecture module."}
+
+print(
+  plot(
+    deg_result,
+    type = "modules"
+  )
+)
 ```
 
 ## Interface-support plot
 
-```{r interface-plot}
-plot(deg_result, type = "interfaces")
+```{r interface-plot, , fig.alt="Horizontal bar chart showing strict gene overlap across the three pairwise PHMIES module interfaces."}
+print(
+  plot(
+    deg_result,
+    type = "interfaces"
+  )
+)
 ```
 
 ## Level 3B null distribution
 
-```{r null-plot}
-plot(deg_result, type = "null")
+```{r null-plot, , fig.alt="Histogram of Level 3B gene counts from the permutation null model with the observed Level 3B count marked by a vertical dashed line."}
+print(
+  plot(
+    deg_result,
+    type = "null"
+  )
+)
 ```
 
 Because the returned plots are `ggplot2` objects, users can add labels, themes,

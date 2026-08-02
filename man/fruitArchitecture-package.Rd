@@ -11,8 +11,9 @@ architectures, and strict Level 3B overlaps from transcriptomic evidence.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/replace-with-your-account/fruitArchitecture}
-  \item Report bugs at \url{https://github.com/replace-with-your-account/fruitArchitecture/issues}
+  \item \url{https://github.com/ensignanalytics/fruitArchitecture}
+  \item \url{https://ensignanalytics.github.io/fruitArchitecture/}
+  \item Report bugs at \url{https://github.com/ensignanalytics/fruitArchitecture/issues}
 }
 
 }
