@@ -61,19 +61,10 @@ fruitArchitectureFromDEG <- function(
   resolved_circuit_definition <-
     definitions$circuit_definition
   
-  if (
-    !is.null(regulatory_overlay) &&
-    !is.data.frame(regulatory_overlay) &&
-    !is.list(regulatory_overlay)
-  ) {
-    stop(
-      paste0(
-        "`regulatory_overlay` must be NULL, a data frame, ",
-        "or a named list of regulatory node and edge tables."
-      ),
-      call. = FALSE
+  validated_regulatory_overlay <-
+    .fa_validate_regulatory_overlay(
+      regulatory_overlay
     )
-  }
 
   standardized_deg <- .standardize_deg_table(
     deg_table = deg_table,
@@ -200,13 +191,13 @@ fruitArchitectureFromDEG <- function(
       },
     
     regulatory_overlay_supplied =
-      !is.null(regulatory_overlay),
+      !is.null(validated_regulatory_overlay),
     
     package_version =
       .fruit_architecture_package_version()
   )
   
-  result$regulatory_overlay <- regulatory_overlay
+  result$regulatory_overlay <- validated_regulatory_overlay
   
   # These are placeholders for the next implementation stage.
   result$baseline_annotation_architecture <- list(
@@ -218,10 +209,72 @@ fruitArchitectureFromDEG <- function(
     metrics = metrics,
     architecture_class = architecture_class
   )
-  
-  result$augmented_regulatory_architecture <- NULL
-  result$embedded_circuits <- NULL
-  
+  if (
+    identical(
+      .fa_definition_id(
+        resolved_circuit_definition
+      ),
+      "none"
+    )
+  ) {
+    
+    result$embedded_circuits <- NULL
+    result$augmented_regulatory_architecture <- NULL
+    
+  } else if (is.null(validated_regulatory_overlay)) {
+    
+    result$embedded_circuits <- data.frame(
+      circuit_id =
+        .fa_definition_id(
+          resolved_circuit_definition
+        ),
+      status = "not_evaluated",
+      reason = "No regulatory overlay supplied.",
+      stringsAsFactors = FALSE
+    )
+    
+    result$augmented_regulatory_architecture <- NULL
+    
+  } else {
+    
+    embedded_circuits <-
+      .fa_reconstruct_embedded_circuits(
+        regulatory_overlay =
+          validated_regulatory_overlay,
+        
+        circuit_definition =
+          resolved_circuit_definition
+      )
+    
+    result$embedded_circuits <-
+      embedded_circuits
+    
+    result$augmented_regulatory_architecture <- list(
+      baseline =
+        result$baseline_annotation_architecture,
+      
+      regulatory_nodes =
+        validated_regulatory_overlay$nodes,
+      
+      regulatory_edges =
+        validated_regulatory_overlay$edges,
+      
+      embedded_circuits =
+        embedded_circuits,
+      
+      complete_circuit_n =
+        sum(
+          embedded_circuits$complete_path_engaged,
+          na.rm = TRUE
+        ),
+      
+      any_complete_circuit =
+        any(
+          embedded_circuits$complete_path_engaged,
+          na.rm = TRUE
+        )
+    )
+  } 
   class(result) <- "fruit_architecture"
   
   result
