@@ -12,8 +12,34 @@ or a custom architecture-definition list.}
 }
 \value{
 A validated architecture-definition list.
+
+A Broad6 architecture-definition list.
 }
 \description{
 Resolve an architecture definition
 }
+\keyword{3A}
+\keyword{3B}
+\keyword{Broad6}
+\keyword{Collapses}
+\keyword{Level}
+\keyword{PHMIES}
+\keyword{and}
+\keyword{architecture}
+\keyword{broad}
+\keyword{conserved}
+\keyword{core}
+\keyword{definition}
+\keyword{for}
+\keyword{fruit-architecture}
+\keyword{functional}
 \keyword{internal}
+\keyword{into}
+\keyword{modules}
+\keyword{pathways}
+\keyword{reconstruction.}
+\keyword{retaining}
+\keyword{six}
+\keyword{strict}
+\keyword{the}
+\keyword{while}

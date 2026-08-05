@@ -1,5 +1,5 @@
 ---
-title: "Validating fruitArchitecture 0.2.0.9000"
+title: "Validating fruitArchitecture 0.2.0.9001"
 author: "Franklin T. Johnson"
 date: "`r format(Sys.Date(), '%B %d, %Y')`"
 output:
@@ -7,7 +7,7 @@ output:
     toc: true
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{Validating fruitArchitecture 0.2.0.9000}
+  %\VignetteIndexEntry{Validating fruitArchitecture 0.2.0.9001}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -69,11 +69,25 @@ package_version
 ```
 
 ```{r validate-version}
-assert_identical(
-  package_version,
-  "0.2.0.9000",
-  "Unexpected fruitArchitecture package version."
+package_version <- as.character(
+  utils::packageVersion("fruitArchitecture")
 )
+
+if (
+  utils::compareVersion(
+    package_version,
+    "0.2.0.9000"
+  ) < 0L
+) {
+  stop(
+    paste0(
+      "fruitArchitecture 0.2.0.9000 or later is required to run 'broad6' definition in the fruitArchitecture call. ",
+      "Observed: ",
+      package_version
+    ),
+    call. = FALSE
+  )
+}
 ```
 
 # Retrieve the internal frozen definitions

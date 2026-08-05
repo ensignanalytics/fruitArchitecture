@@ -359,6 +359,189 @@
 )
 
 
+#' #' Broad6 architecture definition
+#'
+#' Constructs the six-module Broad6 architecture definition while retaining
+#' the PHMIES core for Level 3A and strict Level 3B reconstruction.
+#'
+#' @return A Broad6 architecture-definition list.
+#' @keywords internal
+#' @noRd
+.broad6_architecture_definition <- function() {
+  
+  # Begin with the frozen Paper 5 definition so that any additional
+  # versioned fields, thresholds, and metric settings are retained.
+  definition <- .resolve_architecture_definition("paper5_frozen")
+  
+  modules <- c(
+    "Circadian rhythm",
+    "Plant hormone signal transduction",
+    "MAPK signaling",
+    "Information exchange",
+    "Proteostasis",
+    "RNA regulation"
+  )
+  
+  aliases <- list(
+    "Circadian rhythm" = c(
+      "circadian rhythm",
+      "circadian",
+      "cr"
+    ),
+    
+    "Plant hormone signal transduction" = c(
+      "plant hormone signal transduction",
+      "plant hormone signaling",
+      "plant hormone signalling",
+      "hormone signaling",
+      "hormone signalling",
+      "hormone",
+      "phst"
+    ),
+    
+    "MAPK signaling" = c(
+      "mapk signaling",
+      "mapk signalling",
+      "mapk signaling pathway",
+      "mapk"
+    ),
+    
+    "Information exchange" = c(
+      "information exchange",
+      "information exchange system",
+      "plant-pathogen interaction",
+      "plant pathogen interaction",
+      "defense",
+      "signaling and communication",
+      "ppi"
+    ),
+    
+    "Proteostasis" = c(
+      "proteostasis",
+      "protein processing in endoplasmic reticulum",
+      "protein processing in the endoplasmic reticulum",
+      "protein processing in er",
+      "snare interactions",
+      "snare interactions in vesicular transport",
+      "autophagy",
+      "autophagy - other",
+      "autophagy other",
+      "sulfur relay system",
+      "pper",
+      "snare",
+      "srs"
+    ),
+    
+    "RNA regulation" = c(
+      "rna regulation",
+      "rna transport",
+      "rna degradation",
+      "rna processing",
+      "mrna surveillance",
+      "rna_t",
+      "rna_d"
+    )
+  )
+  
+  # The established PHMIES core remains the Level 3A/3B core.
+  core <- c(
+    "Plant hormone signal transduction",
+    "MAPK signaling",
+    "Information exchange"
+  )
+  
+  # Keep the three PHMIES interfaces first. This preserves compatibility
+  # with any existing rules that identify them by position 1:3.
+  core_interfaces <- data.frame(
+    interface = c(
+      "Hormone-MAPK",
+      "Hormone-Information exchange",
+      "MAPK-Information exchange"
+    ),
+    module_a = core[c(1, 1, 2)],
+    module_b = core[c(2, 3, 3)],
+    stringsAsFactors = FALSE
+  )
+  
+  module_labels <- c(
+    "Circadian rhythm" = "Circadian",
+    "Plant hormone signal transduction" = "Hormone",
+    "MAPK signaling" = "MAPK",
+    "Information exchange" = "Information exchange",
+    "Proteostasis" = "Proteostasis",
+    "RNA regulation" = "RNA regulation"
+  )
+  
+  all_pairs <- utils::combn(
+    modules,
+    2L,
+    simplify = FALSE
+  )
+  
+  # The core-core pairs are already represented above.
+  additional_pairs <- Filter(
+    function(pair) !all(pair %in% core),
+    all_pairs
+  )
+  
+  additional_interfaces <- do.call(
+    rbind,
+    lapply(
+      additional_pairs,
+      function(pair) {
+        data.frame(
+          interface = paste(
+            unname(module_labels[pair]),
+            collapse = "-"
+          ),
+          module_a = pair[[1]],
+          module_b = pair[[2]],
+          stringsAsFactors = FALSE
+        )
+      }
+    )
+  )
+  
+  interfaces <- rbind(
+    core_interfaces,
+    additional_interfaces
+  )
+  
+  rownames(interfaces) <- NULL
+  
+  definition$name <- "broad6"
+  definition$version <- "0.2.0"
+  definition$modules <- modules
+  definition$aliases <- aliases
+  definition$core_modules <- core
+  definition$interfaces <- interfaces
+  
+  # Preserve explicit Level 3A fields while ensuring that they continue
+  # to refer only to the three PHMIES core interfaces.
+  level3a_fields <- intersect(
+    c(
+      "level3a_interfaces",
+      "level3a_required_interfaces",
+      "required_interfaces",
+      "level3a_requirements"
+    ),
+    names(definition)
+  )
+  
+  for (field in level3a_fields) {
+    current_value <- definition[[field]]
+    
+    if (is.character(current_value)) {
+      definition[[field]] <- core_interfaces$interface
+    } else if (is.numeric(current_value)) {
+      definition[[field]] <- seq_len(nrow(core_interfaces))
+    } else if (is.data.frame(current_value)) {
+      definition[[field]] <- core_interfaces
+    }
+  }
+  
+  definition
+}
 #' Resolve an architecture definition
 #'
 #' @param x Either `NULL`, the name of a built-in architecture definition,
@@ -366,7 +549,23 @@
 #'
 #' @return A validated architecture-definition list.
 #' @keywords internal
+#' Broad6 architecture definition
+#'
+#' Collapses the conserved fruit-architecture pathways into six broad
+#' functional modules while retaining the PHMIES core for Level 3A and
+#' strict Level 3B reconstruction.
+#'
+#' @return A Broad6 architecture-definition list.
+#' @keywords internal
 .resolve_architecture_definition <- function(x = NULL) {
+  # Broad6 compatibility name
+  if (
+    is.character(x) &&
+    length(x) == 1L &&
+    identical(tolower(trimws(x)), "broad6")
+  ) {
+    return(.broad6_architecture_definition())
+  }
   
   if (is.null(x)) {
     x <- "PHMIES"
@@ -400,8 +599,7 @@
   if (!is.list(x)) {
     stop(
       paste0(
-        "`architecture_definition` must be 'PHMIES', ",
-        "'paper5_frozen', or a definition list."
+        "`architecture_definition` must be one of: PHMIES, broad6, paper5_frozen; or a custom definition list."
       ),
       call. = FALSE
     )
