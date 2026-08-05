@@ -23,3 +23,9 @@
 ^_pkgdown\.yml$
 ^docs$
 ^release$
+^GSE62415_apple_root_validation_fruitArchitecture_starting_from_raw_RNAseq_counts\.R$
+^fruitArchitecture_input_pear_validation_expression_matrix_in-step\.not_from_raw_counts\.R$
+^gene_models_20170612\.gff3$
+^gene_models_20170612\.gff3/
+^gene_models_20170612\.gff3\.zip$
+^backups$

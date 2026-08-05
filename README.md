@@ -1,4 +1,5 @@
-```r
+
+``` r
 if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
@@ -9,13 +10,15 @@ remotes::install_github(
   build_vignettes = TRUE
 )
 ```
+
 # fruitArchitecture
 
-`fruitArchitecture` reconstructs and quantifies annotation-derived signaling
-architectures from RNA-seq differential-expression evidence. It supports two
-entry points:
+`fruitArchitecture` reconstructs and quantifies annotation-derived
+signaling architectures from RNA-seq differential-expression evidence.
+It supports two entry points:
 
-- `fruitArchitectureFromDEG()` for an existing differential-expression table.
+- `fruitArchitectureFromDEG()` for an existing differential-expression
+  table.
 - `fruitArchitecture()` for a raw count matrix analyzed with DESeq2.
 
 Version 0.1.4-alpha is the first public research release. The package
@@ -30,7 +33,7 @@ reference-dataset validation.
 R normally installs user packages into the first directory returned by
 `.libPaths()`.
 
-```r
+``` r
 user_library <- .libPaths()[1]
 dir.create(user_library, recursive = TRUE, showWarnings = FALSE)
 user_library
@@ -38,16 +41,17 @@ user_library
 
 On Windows with R 4.5, this is commonly similar to:
 
-```text
+``` text
 C:/Users/<username>/AppData/Local/R/win-library/4.5
 ```
 
 ### 2. Install from an extracted package project
 
-Download the project ZIP, extract it, and point `remotes::install_local()` to
-the extracted directory containing `DESCRIPTION`.
+Download the project ZIP, extract it, and point
+`remotes::install_local()` to the extracted directory containing
+`DESCRIPTION`.
 
-```r
+``` r
 if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes", lib = user_library)
 }
@@ -64,14 +68,15 @@ remotes::install_local(
 ```
 
 A project ZIP is not the same as a built Windows binary ZIP. Do not use
-`type = "win.binary"` unless the file was created by `R CMD INSTALL --build`
-or an equivalent binary-build service.
+`type = "win.binary"` unless the file was created by
+`R CMD INSTALL --build` or an equivalent binary-build service.
 
 ### 3. Install the optional raw-count dependency
 
-The DEG-table workflow does not require DESeq2. The raw-count workflow does.
+The DEG-table workflow does not require DESeq2. The raw-count workflow
+does.
 
-```r
+``` r
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager", lib = user_library)
 }
@@ -86,23 +91,24 @@ BiocManager::install(
 
 ### 4. Load and verify
 
-```r
+``` r
 library(fruitArchitecture, lib.loc = user_library)
 packageVersion("fruitArchitecture")
 supportedSpecies()
 ```
 
-If Windows reports that `rlang.dll`, `glue.dll`, or `cli.dll` is locked, close
-all R and RStudio sessions, remove any `00LOCK*` directories from the user
-library, restart R, and reinstall those dependencies. A final
+If Windows reports that `rlang.dll`, `glue.dll`, or `cli.dll` is locked,
+close all R and RStudio sessions, remove any `00LOCK*` directories from
+the user library, restart R, and reinstall those dependencies. A final
 `* DONE (fruitArchitecture)` message means the package itself installed.
 
 ## Quick-start example using the included DEG table
 
-The installed package includes a small synthetic dataset designed to exercise
-all architecture levels and create reproducible example figures.
+The installed package includes a small synthetic dataset designed to
+exercise all architecture levels and create reproducible example
+figures.
 
-```r
+``` r
 library(fruitArchitecture)
 
 example_directory <- system.file("extdata", package = "fruitArchitecture")
@@ -133,7 +139,7 @@ summary(result)
 
 Inspect the principal result tables:
 
-```r
+``` r
 result$module_summary
 result$interface_summary
 result$level3b_genes
@@ -145,7 +151,7 @@ result$null_model[c("method", "expected", "observed", "p_value")]
 
 Each call returns a regular `ggplot2` object.
 
-```r
+``` r
 module_plot <- plot(result, type = "modules")
 interface_plot <- plot(result, type = "interfaces")
 null_plot <- plot(result, type = "null")
@@ -157,7 +163,7 @@ null_plot
 
 Export all standard figures and analysis tables:
 
-```r
+``` r
 output_directory <- file.path(
   getwd(),
   "fruitArchitecture_example_output"
@@ -184,15 +190,18 @@ list.files(output_directory, recursive = TRUE)
 The output includes:
 
 - a serialized `fruit_architecture` RDS object;
-- differential-expression, gene-membership, module, interface, and summary CSVs;
-- module-support, interface-support, and Level 3B null-distribution figures;
+- differential-expression, gene-membership, module, interface, and
+  summary CSVs;
+- module-support, interface-support, and Level 3B null-distribution
+  figures;
 - vector PDF and high-resolution PNG/TIFF versions of each figure.
 
 ## Full raw-count workflow
 
-This example uses the included six-sample count matrix. It requires DESeq2.
+This example uses the included six-sample count matrix. It requires
+DESeq2.
 
-```r
+``` r
 library(fruitArchitecture)
 
 example_directory <- system.file("extdata", package = "fruitArchitecture")
@@ -239,9 +248,10 @@ plot(count_result, type = "modules")
 
 ## Required input schemas
 
-A DEG table must contain one row per unique gene and, by default, these fields:
+A DEG table must contain one row per unique gene and, by default, these
+fields:
 
-```text
+``` text
 gene_id
 log2_fold_change
 adjusted_p_value
@@ -249,7 +259,7 @@ adjusted_p_value
 
 Annotation must be long format with one row per gene-module assignment:
 
-```text
+``` text
 gene_id    module
 G1         Plant hormone signal transduction
 G1         MAPK signaling
@@ -263,7 +273,7 @@ Alternative DEG column names can be provided through `gene_id_col`,
 
 Contributors working from the package root can use:
 
-```r
+``` r
 if (!requireNamespace("devtools", quietly = TRUE)) {
   install.packages("devtools")
 }
@@ -274,27 +284,28 @@ devtools::check()
 devtools::install()
 ```
 
-See `vignette("getting-started", package = "fruitArchitecture")` for the full
-installed-package workflow. After installation, the complete example can also be
-run with `demo("fruitArchitecture-example", package = "fruitArchitecture")`.
+See `vignette("getting-started", package = "fruitArchitecture")` for the
+full installed-package workflow. After installation, the complete
+example can also be run with
+`demo("fruitArchitecture-example", package = "fruitArchitecture")`.
 
 ## Package manuals
 
 After installation, open the long-form guides from R:
 
-```r
+``` r
 vignette("fruitArchitecture-user-manual", package = "fruitArchitecture")
 vignette("function-data-reference", package = "fruitArchitecture")
 ```
 
-The first is the full user manual. The second is a compact inventory of public
-functions, returned-object components, package directories, and the bundled
-synthetic example data.
+The first is the full user manual. The second is a compact inventory of
+public functions, returned-object components, package directories, and
+the bundled synthetic example data.
 
-When the package was installed without building vignettes, open the installed
-static manuals directly:
+When the package was installed without building vignettes, open the
+installed static manuals directly:
 
-```r
+``` r
 browseURL(system.file(
   "manuals",
   "fruitArchitecture-user-manual.html",
@@ -307,3 +318,13 @@ browseURL(system.file(
   package = "fruitArchitecture"
 ))
 ```
+
+## Reproducible reanalyses
+
+Study-specific workflows and real-data package validations are
+maintained in the
+[fruitArchitecture_reanalysis](https://github.com/ensignanalytics/fruitArchitecture_reanalysis)
+repository.
+
+The first reanalysis uses GSE62415 apple seeds as a module-positive,
+PHMIES-interface-negative validation.

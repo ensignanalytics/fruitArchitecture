@@ -9,7 +9,17 @@
 #' @param annotation Gene-to-module or gene-to-pathway annotation table.
 #' @param alpha Adjusted P-value threshold.
 #' @param log2fc_threshold Absolute log2 fold-change threshold.
-#' @param architecture_definition Architecture definition.
+#' @param architecture_definition Architecture rule system. The default
+#'   `"PHMIES"` preserves frozen v0.1 behavior. Use `"paper5_frozen"` for
+#'   the Broad6 Paper 5 rules. A custom definition list is also accepted.
+#' @param module_definition Module-assignment system. Use `NULL` to select
+#'   the module definition required by `architecture_definition`. Built-in
+#'   values are `"core10"` and `"broad6"`.
+#' @param circuit_definition Directed-circuit rule system. The default
+#'   `"none"` preserves legacy behavior. Use
+#'   `"autocatalytic_ethylene_v1"` for the frozen ethylene circuit.
+#' @param regulatory_overlay Optional data frame or named list containing
+#'   experimentally supported regulatory nodes and directed edges.
 #' @param min_module_genes Minimum significant genes per module.
 #' @param min_interface_genes Minimum strict overlap genes per interface.
 #' @param n_permutations Number of Level 3B permutations.
@@ -28,6 +38,9 @@ fruitArchitecture <- function(
     alpha = 0.05,
     log2fc_threshold = 1,
     architecture_definition = "PHMIES",
+    module_definition = NULL,
+    circuit_definition = "none",
+    regulatory_overlay = NULL,
     min_module_genes = 1L,
     min_interface_genes = 1L,
     n_permutations = 10000L,
@@ -72,6 +85,9 @@ fruitArchitecture <- function(
     alpha = alpha,
     log2fc_threshold = log2fc_threshold,
     architecture_definition = architecture_definition,
+    module_definition = module_definition,
+    circuit_definition = circuit_definition,
+    regulatory_overlay = regulatory_overlay,
     min_module_genes = min_module_genes,
     min_interface_genes = min_interface_genes,
     n_permutations = n_permutations,

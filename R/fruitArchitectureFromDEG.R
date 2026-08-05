@@ -9,7 +9,17 @@
 #' @param padj_col Name of the adjusted P-value column.
 #' @param alpha Adjusted P-value threshold.
 #' @param log2fc_threshold Absolute log2 fold-change threshold.
-#' @param architecture_definition Either `"PHMIES"` or a custom definition list.
+#' @param module_definition Module-assignment system. Use `NULL` to select
+#'   the module definition required by `architecture_definition`. Built-in
+#'   values are `"core10"` and `"broad6"`.
+#' @param architecture_definition Architecture rule system. The default
+#'   `"PHMIES"` preserves frozen v0.1 behavior. Use `"paper5_frozen"` for
+#'   the Broad6 Paper 5 rules.
+#' @param circuit_definition Directed-circuit rule system. The default
+#'   `"none"` preserves legacy behavior. Use
+#'   `"autocatalytic_ethylene_v1"` for the frozen ethylene circuit.
+#' @param regulatory_overlay Optional data frame or named list containing
+#'   experimentally supported regulatory nodes and directed edges.
 #' @param min_module_genes Minimum number of significant genes required for a
 #'   module to be considered present.
 #' @param min_interface_genes Minimum number of strict overlap genes required
@@ -29,12 +39,32 @@ fruitArchitectureFromDEG <- function(
     alpha = 0.05,
     log2fc_threshold = 1,
     architecture_definition = "PHMIES",
+    module_definition = NULL,
+    circuit_definition = "none",
+    regulatory_overlay = NULL,
     min_module_genes = 1L,
     min_interface_genes = 1L,
     n_permutations = 10000L,
     seed = 1234L) {
 
-  definition <- .resolve_architecture_definition(architecture_definition)
+  definitions <- .fa_resolve_definitions(
+    module_definition = module_definition,
+    architecture_definition = architecture_definition,
+    circuit_definition = circuit_definition
+  )
+  
+  definition <- definitions$architecture_definition
+  
+  resolved_module_definition <-
+    definitions$module_definition
+  
+  resolved_circuit_definition <-
+    definitions$circuit_definition
+  
+  validated_regulatory_overlay <-
+    .fa_validate_regulatory_overlay(
+      regulatory_overlay
+    )
 
   standardized_deg <- .standardize_deg_table(
     deg_table = deg_table,
@@ -81,6 +111,7 @@ fruitArchitectureFromDEG <- function(
 
   result <- list(
     call = match.call(),
+    
     metadata = list(
       species = species %||% "unspecified",
       architecture = definition$name,
@@ -89,12 +120,19 @@ fruitArchitectureFromDEG <- function(
       log2fc_threshold = log2fc_threshold,
       seed = seed
     ),
+    
     input_audit = list(
       input_genes = nrow(standardized_deg),
       significant_genes = sum(standardized_deg$deg_status),
-      mapped_genes = length(intersect(standardized_deg$gene_id, mapped_genes)),
+      mapped_genes = length(
+        intersect(
+          standardized_deg$gene_id,
+          mapped_genes
+        )
+      ),
       annotation_coverage = annotation_coverage
     ),
+    
     differential_expression = standardized_deg,
     mapped_annotation = mapped_annotation,
     gene_membership = reconstruction$gene_membership,
@@ -108,6 +146,7 @@ fruitArchitectureFromDEG <- function(
     architecture_class = architecture_class,
     robustness = robustness,
     definition = definition,
+    
     provenance = list(
       package = "fruitArchitecture",
       package_version = .fruit_architecture_package_version(),
@@ -115,7 +154,128 @@ fruitArchitectureFromDEG <- function(
       analysis_time = Sys.time()
     )
   )
-
+  
+  result$definition_metadata <- list(
+    module_definition =
+      .fa_definition_id(
+        resolved_module_definition
+      ),
+    
+    module_definition_version =
+      if (!is.null(resolved_module_definition$version)) {
+        resolved_module_definition$version
+      } else {
+        NA_character_
+      },
+    
+    architecture_definition =
+      .fa_definition_id(definition),
+    
+    architecture_definition_version =
+      if (!is.null(definition$version)) {
+        definition$version
+      } else {
+        NA_character_
+      },
+    
+    circuit_definition =
+      .fa_definition_id(
+        resolved_circuit_definition
+      ),
+    
+    circuit_definition_version =
+      if (!is.null(resolved_circuit_definition$version)) {
+        resolved_circuit_definition$version
+      } else {
+        NA_character_
+      },
+    
+    regulatory_overlay_supplied =
+      !is.null(validated_regulatory_overlay),
+    
+    package_version =
+      .fruit_architecture_package_version()
+  )
+  
+  result$regulatory_overlay <- validated_regulatory_overlay
+  
+  # These are placeholders for the next implementation stage.
+  result$baseline_annotation_architecture <- list(
+    module_summary = reconstruction$module_summary,
+    interface_summary = reconstruction$interface_summary,
+    level3a_present = reconstruction$level3a_present,
+    level3b_genes = reconstruction$level3b_genes,
+    level3b_count = reconstruction$level3b_count,
+    metrics = metrics,
+    architecture_class = architecture_class
+  )
+  if (
+    identical(
+      .fa_definition_id(
+        resolved_circuit_definition
+      ),
+      "none"
+    )
+  ) {
+    
+    result$embedded_circuits <- NULL
+    result$augmented_regulatory_architecture <- NULL
+    
+  } else if (is.null(validated_regulatory_overlay)) {
+    
+    result$embedded_circuits <- data.frame(
+      circuit_id =
+        .fa_definition_id(
+          resolved_circuit_definition
+        ),
+      status = "not_evaluated",
+      reason = "No regulatory overlay supplied.",
+      stringsAsFactors = FALSE
+    )
+    
+    result$augmented_regulatory_architecture <- NULL
+    
+  } else {
+    
+    embedded_circuits <-
+      .fa_reconstruct_embedded_circuits(
+        regulatory_overlay =
+          validated_regulatory_overlay,
+        
+        circuit_definition =
+          resolved_circuit_definition
+      )
+    
+    result$embedded_circuits <-
+      embedded_circuits
+    
+    result$augmented_regulatory_architecture <- list(
+      baseline =
+        result$baseline_annotation_architecture,
+      
+      regulatory_nodes =
+        validated_regulatory_overlay$nodes,
+      
+      regulatory_edges =
+        validated_regulatory_overlay$edges,
+      
+      embedded_circuits =
+        embedded_circuits,
+      
+      complete_circuit_n =
+        sum(
+          embedded_circuits$complete_path_engaged,
+          na.rm = TRUE
+        ),
+      
+      any_complete_circuit =
+        any(
+          embedded_circuits$complete_path_engaged,
+          na.rm = TRUE
+        )
+    )
+  } 
   class(result) <- "fruit_architecture"
+  
   result
 }

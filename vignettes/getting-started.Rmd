@@ -85,16 +85,31 @@ result$level3b_genes
 
 # Figures
 
-```{r module-figure, fig.width=8, fig.height=5}
-plot(result, type = "modules")
+```{r module-figure, fig.width=8, fig.height=5, , fig.alt="Horizontal bar chart summarizing significant gene support across the default fruit architecture modules."}
+print(
+  plot(
+    result,
+    type = "modules"
+  )
+)
 ```
 
-```{r interface-figure, fig.width=8, fig.height=5}
-plot(result, type = "interfaces")
+```{r interface-figure, fig.width=8, fig.height=5, , fig.alt="Horizontal bar chart summarizing strict gene overlap for each pairwise PHMIES interface."}
+print(
+  plot(
+    result,
+    type = "interfaces"
+  )
+)
 ```
 
-```{r null-figure, fig.width=8, fig.height=5}
-plot(result, type = "null")
+```{r null-figure, fig.width=8, fig.height=5, , fig.alt="Permutation null distribution for the number of Level 3B genes, with the observed value shown as a dashed vertical line."}
+print(
+  plot(
+    result,
+    type = "null"
+  )
+)
 ```
 
 # Export a complete example analysis

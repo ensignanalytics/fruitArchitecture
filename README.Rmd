@@ -1,6 +1,17 @@
 ---
 output: github_document
 ---
+```r
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
+remotes::install_github(
+  "ensignanalytics/fruitArchitecture",
+  ref = "v0.1.4-alpha",
+  build_vignettes = TRUE
+)
+```
 
 # fruitArchitecture
 
@@ -11,9 +22,10 @@ entry points:
 - `fruitArchitectureFromDEG()` for an existing differential-expression table.
 - `fruitArchitecture()` for a raw count matrix analyzed with DESeq2.
 
-Version 0.1.1 is an early research release. The package implements the complete
-software workflow, but metric equations and class thresholds remain explicitly
-versioned while they undergo reference-dataset validation.
+Version 0.1.4-alpha is the first public research release. The package
+implements the complete software workflow, while metric equations and
+architecture-class thresholds remain explicitly versioned during
+reference-dataset validation.
 
 ## Installation
 
@@ -299,3 +311,12 @@ browseURL(system.file(
   package = "fruitArchitecture"
 ))
 ```
+## Reproducible reanalyses
+
+Study-specific workflows and real-data package validations are maintained in
+the
+[fruitArchitecture_reanalysis](https://github.com/ensignanalytics/fruitArchitecture_reanalysis)
+repository.
+
+The first reanalysis uses GSE62415 apple seeds as a module-positive,
+PHMIES-interface-negative validation.

@@ -7,10 +7,12 @@
 .default_architecture_definition()
 }
 \value{
-A named list containing module names, aliases, pairwise interfaces,
-Level 3A requirements, and metric weights.
+A named list containing module names, aliases, pairwise
+interfaces, Level 3A requirements, and metric weights.
 }
 \description{
-Default PHMIES architecture definition
+This definition preserves the original fruitArchitecture v0.1
+module names, aliases, interfaces, weights, and classification
+behavior.
 }
 \keyword{internal}

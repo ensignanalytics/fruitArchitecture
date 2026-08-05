@@ -1,12 +1,12 @@
 Package: fruitArchitecture
-Title: Reconstruct and Quantify Higher-Order Signaling Architectures
-Version: 0.1.4
+Title: Reconstruction and Quantification of Higher-Order Signaling Architectures
+Version: 0.2.0.9001
 Authors@R: 
     person(
       given = "Franklin T.",
       family = "Johnson",
       role = c("aut", "cre"),
-      email = "replace-with-your-email@example.com"
+      email = "franklin@ensignanalytics.com"
     )
 Description: Reconstructs annotation-derived signaling modules, pairwise
     interfaces, and higher-order organizational architectures from
@@ -15,8 +15,8 @@ Description: Reconstructs annotation-derived signaling modules, pairwise
     balance and entropy statistics, permutation-based Level 3B testing,
     robustness summaries, and publication-quality visualizations.
 License: MIT + file LICENSE
-URL: https://github.com/replace-with-your-account/fruitArchitecture
-BugReports: https://github.com/replace-with-your-account/fruitArchitecture/issues
+URL: https://github.com/ensignanalytics/fruitArchitecture, https://ensignanalytics.github.io/fruitArchitecture/
+BugReports: https://github.com/ensignanalytics/fruitArchitecture/issues
 Depends: 
     R (>= 4.3.0)
 Imports:
