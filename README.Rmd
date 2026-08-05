@@ -311,3 +311,12 @@ browseURL(system.file(
   package = "fruitArchitecture"
 ))
 ```
+## Reproducible reanalyses
+
+Study-specific workflows and real-data package validations are maintained in
+the
+[fruitArchitecture_reanalysis](https://github.com/ensignanalytics/fruitArchitecture_reanalysis)
+repository.
+
+The first reanalysis uses GSE62415 apple seeds as a module-positive,
+PHMIES-interface-negative validation.
