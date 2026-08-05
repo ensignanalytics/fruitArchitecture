@@ -1,6 +1,6 @@
 Package: fruitArchitecture
 Title: Reconstruction and Quantification of Higher-Order Signaling Architectures
-Version: 0.2.0.9000
+Version: 0.2.0.9001
 Authors@R: 
     person(
       given = "Franklin T.",
