@@ -509,12 +509,20 @@
   
   rownames(interfaces) <- NULL
   
+  # Canonical identifiers distinguish the three PHMIES Level 3A
+  # requirements from the 12 additional Broad6 topology edges.
+  core_interface_ids <- .fa_interface_id(
+    core_interfaces$module_a,
+    core_interfaces$module_b
+  )
+  
   definition$name <- "broad6"
   definition$version <- "0.2.0"
   definition$modules <- modules
   definition$aliases <- aliases
   definition$core_modules <- core
   definition$interfaces <- interfaces
+  definition$level3a_interface_ids <- core_interface_ids
   
   # Preserve explicit Level 3A fields while ensuring that they continue
   # to refer only to the three PHMIES core interfaces.
