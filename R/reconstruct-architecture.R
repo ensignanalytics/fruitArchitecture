@@ -68,7 +68,40 @@
   rownames(interface_summary) <- NULL
 
   core_rows <- module_summary$module %in% definition$core_modules
-  level3a_present <- all(module_summary$present[core_rows]) && all(interface_summary$present)
+
+  # Level 3A is defined by the interfaces explicitly declared by the
+  # architecture definition. This matters for Broad6, which reconstructs
+  # all 15 pairwise interfaces while retaining only the three PHMIES-core
+  # interfaces as Level 3A requirements. Definitions without an explicit
+  # Level 3A interface list retain the historical all-interfaces behavior.
+  required_level3a_ids <- definition$level3a_interface_ids
+
+  # Preserve definition-supplied identifiers when present. The frozen
+  # PHMIES definition intentionally uses short canonical IDs, whereas
+  # Broad6 compatibility interfaces are identified from their module names.
+  interface_ids <- if ("interface_id" %in% names(definition$interfaces)) {
+    as.character(definition$interfaces$interface_id)
+  } else {
+    .fa_interface_id(
+      interface_summary$module_a,
+      interface_summary$module_b
+    )
+  }
+
+  if (!is.null(required_level3a_ids) && length(required_level3a_ids) > 0L) {
+    required_level3a_ids <- as.character(required_level3a_ids)
+    required_rows <- interface_ids %in% required_level3a_ids
+
+    level3a_interfaces_present <-
+      all(required_level3a_ids %in% interface_ids) &&
+      all(interface_summary$present[required_rows])
+  } else {
+    level3a_interfaces_present <- all(interface_summary$present)
+  }
+
+  level3a_present <-
+    all(module_summary$present[core_rows]) &&
+    level3a_interfaces_present
 
   level3b_genes <- names(Filter(function(z) {
     all(definition$core_modules %in% z)

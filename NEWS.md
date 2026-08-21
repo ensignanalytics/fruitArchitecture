@@ -1,3 +1,19 @@
+# fruitArchitecture 0.2.0.9002
+
+* Corrected Broad6 Level 3A reconstruction so that Level 3A is determined
+  by the three declared PHMIES core interfaces rather than requiring all
+  15 Broad6 pairwise interfaces.
+* Broad6 module detection, all 15 interface calls, Level 3B, ISI, entropy,
+  balance, null-model testing, PHMIES, and paper5_frozen behavior are unchanged.
+* Added regression tests for Broad6, PHMIES, and paper5_frozen definitions.
+
+# fruitArchitecture 0.2.0.9001
+
+* Added Broad6 Level 3A reconstruction.
+* Added ethylene biosynthesis circuitry definition based on fruitENCODE feedback loop genes/enzymes.
+* Broad6 module detection, all 15 interface calls, Level 3B, ISI, entropy,
+  balance, null-model testing, PHMIES, and paper5_frozen behavior are unchanged.
+
 # fruitArchitecture 0.1.4
 
 - Added a comprehensive package user manual vignette covering installation, input requirements, DEG-table and raw-count workflows, architecture reconstruction, metrics, null-model testing, figures, exports, custom definitions, troubleshooting, and reproducibility.
