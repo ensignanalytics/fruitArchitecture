@@ -310,7 +310,7 @@
   
   list(
     name = "paper5_frozen",
-    version = "paper5-frozen-v1",
+    version = "paper5-frozen-v1.1",
     
     definition_status = "frozen",
     module_definition = "broad6",
@@ -326,12 +326,16 @@
     aliases = aliases,
     core_modules = core,
     
-    # Required PHMIES interfaces used for Level 3A classification.
-    interfaces = required_pairs,
+    # Reconstruct the complete Broad6 topology. Level 3A remains
+    # restricted to the three PHMIES core interfaces declared below.
+    interfaces = interface_universe,
     
-    # Complete Broad6 interface universe used for expanded topology.
+    # Retain an explicit copy of the complete Broad6 interface universe
+    # for downstream validation and provenance.
     interface_universe = interface_universe,
     
+    # Explicit PHMIES requirements used for Level 3A and PHMIES class.
+    level3a_interfaces = required_pairs,
     level3a_interface_ids = required_pairs$interface_id,
     level3b_modules = core,
     
@@ -517,7 +521,7 @@
   )
   
   definition$name <- "broad6"
-  definition$version <- "0.2.0"
+  definition$version <- "0.2.1"
   definition$modules <- modules
   definition$aliases <- aliases
   definition$core_modules <- core

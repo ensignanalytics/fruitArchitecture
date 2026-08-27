@@ -1,11 +1,19 @@
-.classify_architecture <- function(reconstruction, metrics) {
+.classify_architecture <- function(reconstruction, metrics, definition) {
+  class_level2_fraction <- if (
+    isTRUE(definition$extended_interfaces_affect_class)
+  ) {
+    metrics$level2_fraction
+  } else {
+    metrics$required_level2_fraction
+  }
+
   if (reconstruction$level3a_present && reconstruction$level3b_count > 0L) {
     return("IV")
   }
-  if (reconstruction$level3a_present || metrics$level2_fraction >= 2 / 3) {
+  if (reconstruction$level3a_present || class_level2_fraction >= 2 / 3) {
     return("III")
   }
-  if (metrics$level1_fraction >= 0.5 || metrics$level2_fraction > 0) {
+  if (metrics$level1_fraction >= 0.5 || class_level2_fraction > 0) {
     return("II")
   }
   "I"

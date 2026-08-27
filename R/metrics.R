@@ -4,6 +4,22 @@
 
   level1_fraction <- mean(module_summary$present)
   level2_fraction <- mean(interface_summary$present)
+
+  required_level3a_ids <- definition$level3a_interface_ids
+
+  if (is.null(required_level3a_ids) || length(required_level3a_ids) == 0L) {
+    required_level2_fraction <- level2_fraction
+  } else {
+    required_level3a_ids <- as.character(required_level3a_ids)
+    present_interface_ids <- as.character(
+      interface_summary$interface_id[interface_summary$present]
+    )
+
+    required_level2_fraction <- mean(
+      required_level3a_ids %in% present_interface_ids
+    )
+  }
+
   level3a_score <- as.numeric(reconstruction$level3a_present)
   level3b_score <- as.numeric(reconstruction$level3b_count > 0L)
 
@@ -30,10 +46,11 @@
   }
 
   list(
-    metric_version = "0.1.0",
+    metric_version = "0.1.1",
     weighted_isi = unname(weighted_isi),
     level1_fraction = level1_fraction,
     level2_fraction = level2_fraction,
+    required_level2_fraction = required_level2_fraction,
     architecture_entropy = unname(entropy),
     architecture_balance = unname(balance)
   )

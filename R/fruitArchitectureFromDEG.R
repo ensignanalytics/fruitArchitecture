@@ -106,7 +106,7 @@ fruitArchitectureFromDEG <- function(
   annotation_coverage <- length(intersect(standardized_deg$gene_id, mapped_genes)) /
     nrow(standardized_deg)
 
-  architecture_class <- .classify_architecture(reconstruction, metrics)
+  architecture_class <- .classify_architecture(reconstruction, metrics, definition)
   robustness <- .assess_robustness(metrics, null_model, annotation_coverage)
 
   result <- list(
