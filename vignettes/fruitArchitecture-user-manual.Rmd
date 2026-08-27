@@ -369,6 +369,13 @@ The current weighted ISI combines four components:
 The score ranges from 0 to 1. The implementation records a metric version so
 future changes can be tracked.
 
+For Broad6 and `paper5_frozen`, `level2_fraction` is calculated across all 15
+reconstructed Broad6 interfaces and therefore contributes expanded topology to
+weighted ISI. The separate `required_level2_fraction` is calculated only across
+the three PHMIES core interfaces and is used for the required-interface portion
+of the PHMIES Class I-IV call when extended interfaces are not allowed to affect
+class.
+
 ## Architecture entropy
 
 The current entropy statistic is normalized Shannon entropy calculated from

@@ -47,6 +47,25 @@
   deg_membership <- unique(gene_module[gene_module$deg_status, c("gene_id", "module"), drop = FALSE])
   membership_by_gene <- split(deg_membership$module, deg_membership$gene_id)
 
+  # Use definition-supplied interface identifiers when available. This
+  # preserves the frozen PHMIES v0.1 identifiers while allowing Broad6
+  # definitions without an explicit identifier column to use canonical
+  # module-pair identifiers. Missing or empty supplied values fall back to
+  # the canonical module-pair identifier for that row.
+  interface_ids <- .fa_interface_id(
+    as.character(definition$interfaces$module_a),
+    as.character(definition$interfaces$module_b)
+  )
+
+  if ("interface_id" %in% names(definition$interfaces)) {
+    supplied_interface_ids <- trimws(
+      as.character(definition$interfaces$interface_id)
+    )
+    use_supplied <- !is.na(supplied_interface_ids) &
+      nzchar(supplied_interface_ids)
+    interface_ids[use_supplied] <- supplied_interface_ids[use_supplied]
+  }
+
   interface_summary <- do.call(
     rbind,
     lapply(seq_len(nrow(definition$interfaces)), function(i) {
@@ -56,6 +75,7 @@
       }, membership_by_gene))
       data.frame(
         interface = row$interface,
+        interface_id = interface_ids[[i]],
         module_a = row$module_a,
         module_b = row$module_b,
         overlap_genes = length(overlap_genes),
@@ -76,17 +96,10 @@
   # Level 3A interface list retain the historical all-interfaces behavior.
   required_level3a_ids <- definition$level3a_interface_ids
 
-  # Preserve definition-supplied identifiers when present. The frozen
-  # PHMIES definition intentionally uses short canonical IDs, whereas
-  # Broad6 compatibility interfaces are identified from their module names.
-  interface_ids <- if ("interface_id" %in% names(definition$interfaces)) {
-    as.character(definition$interfaces$interface_id)
-  } else {
-    .fa_interface_id(
-      interface_summary$module_a,
-      interface_summary$module_b
-    )
-  }
+  # Interface summaries carry definition-stable identifiers. These are
+  # legacy PHMIES IDs when the frozen definition supplies them, and
+  # canonical module-pair IDs for Broad6-compatible definitions.
+  interface_ids <- as.character(interface_summary$interface_id)
 
   if (!is.null(required_level3a_ids) && length(required_level3a_ids) > 0L) {
     required_level3a_ids <- as.character(required_level3a_ids)
